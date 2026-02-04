@@ -66,13 +66,20 @@ class DrawerWidget extends StatelessWidget {
                       onPressed: () {},
                       iconSize: 40,
                     ),
-                    Padding(
-                      padding: EdgeInsetsGeometry.only(right: 20),
-                      child: IconButton(
-                        icon: Icon(Icons.logout, color: Colors.white),
-                        onPressed: () {},
-                        iconSize: 40,
-                      ),
+                    ValueListenableBuilder(
+                      valueListenable: isLightModeNotifier,
+                      builder: (context, isLightMode, child) {
+                        return Padding(
+                          padding: EdgeInsetsGeometry.only(right: 20),
+                          child: IconButton(
+                            icon: Icon(isLightMode ? Icons.dark_mode : Icons.sunny, color: Colors.white),
+                            onPressed: () {
+                              isLightModeNotifier.value = !isLightMode;
+                            },
+                            iconSize: 40,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

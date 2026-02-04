@@ -27,6 +27,5 @@ class WidgetTree extends StatelessWidget {
         child: const Icon(Icons.add, color: Colors.white),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
-    ;
   }
 }
