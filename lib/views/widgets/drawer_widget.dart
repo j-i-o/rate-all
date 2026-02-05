@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/notifiers.dart';
+import 'package:flutter_application_1/views/pages/settings_page.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({super.key});
@@ -75,8 +76,12 @@ class DrawerWidget extends StatelessWidget {
                         IconButton(
                           icon: Icon(Icons.settings, color: Colors.white),
                           onPressed: () {
-                            selectedPageNotifier.value = 2;
-                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SettingsPage(),
+                              ),
+                            );
                           },
                           iconSize: 40,
                         ),

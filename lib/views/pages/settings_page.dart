@@ -11,46 +11,51 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            ValueListenableBuilder(
-              valueListenable: accentColorNotifier,
-              builder: (context, value, child) {
-                return Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: DropdownButtonFormField(
-                        isExpanded: true,
-                        initialValue: accentColorNotifier.value,
-                        items: [
-                          DropdownMenuItem(
-                            value: Colors.amber,
-                            child: Text('Amarillo'),
-                          ),
-                          DropdownMenuItem(
-                            value: Colors.blue[600],
-                            child: Text('Azul'),
-                          ),
-                          DropdownMenuItem(
-                            value: Colors.red[600],
-                            child: Text('Rojo'),
-                          ),
-                        ],
-                        onChanged: (colorSelected) {
-                          accentColorNotifier.value = colorSelected!;
-                        },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              ValueListenableBuilder(
+                valueListenable: accentColorNotifier,
+                builder: (context, value, child) {
+                  return Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: DropdownButtonFormField(
+                          isExpanded: true,
+                          initialValue: accentColorNotifier.value,
+                          items: [
+                            DropdownMenuItem(
+                              value: Colors.amber,
+                              child: Text('Amarillo'),
+                            ),
+                            DropdownMenuItem(
+                              value: Colors.blue[600],
+                              child: Text('Azul'),
+                            ),
+                            DropdownMenuItem(
+                              value: Colors.red[600],
+                              child: Text('Rojo'),
+                            ),
+                          ],
+                          onChanged: (colorSelected) {
+                            accentColorNotifier.value = colorSelected!;
+                          },
+                        ),
                       ),
-                    ),
-                    Expanded(flex: 1, child: Container()),
-                  ],
-                );
-              },
-            ),
-          ],
+                      Expanded(flex: 1, child: Container()),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
