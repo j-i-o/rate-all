@@ -3,33 +3,16 @@ import 'package:flutter_application_1/views/widget_tree.dart';
 import 'package:lottie/lottie.dart';
 
 class WelcomePage extends StatefulWidget {
-  TextEditingController controllerEmail = TextEditingController();
-  TextEditingController controllerPassword = TextEditingController();
-
-  WelcomePage({super.key});
+  const WelcomePage({super.key});
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  @override
-  void initState() {
-    super.initState();
-    widget.controllerEmail.addListener(_onTextChanged);
-    widget.controllerPassword.addListener(_onTextChanged);
-  }
-
-  void _onTextChanged() {
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    widget.controllerEmail.removeListener(_onTextChanged);
-    widget.controllerPassword.removeListener(_onTextChanged);
-    super.dispose();
-  }
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,59 +20,67 @@ class _WelcomePageState extends State<WelcomePage> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: Column(
-            children: [
-              SizedBox(height: 100),
-              Lottie.asset(
-                'assets/lotties/Stars.json',
-                width: 300,
-                height: 300,
-                fit: BoxFit.fill,
-                repeat: false,
-              ),
-              FittedBox(
-                child: Text(
-                  '¡¡Bienvenido a RateAll!!',
-                  style: TextStyle(fontSize: 40),
+          child: Form(
+            key: _formKey,
+            onChanged: () => setState(() {}),
+            child: Column(
+              children: [
+                SizedBox(height: 100),
+                Lottie.asset(
+                  'assets/lotties/Stars.json',
+                  width: 300,
+                  height: 300,
+                  fit: BoxFit.fill,
+                  repeat: false,
                 ),
-              ),
-              SizedBox(height: 150),
-              TextField(
-                controller: widget.controllerEmail,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Ingresa tu email',
+                FittedBox(
+                  child: Text(
+                    '¡¡Bienvenido a RateAll!!',
+                    style: TextStyle(fontSize: 40),
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: widget.controllerPassword,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Ingresa tu contraseña',
+                SizedBox(height: 150),
+                TextFormField(
+                  controller: _controllerEmail,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Ingresa tu email',
+                  ),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Email requerido' : null,
                 ),
-              ),
-              SizedBox(height: 20),
-              FilledButton(
-                style: FilledButton.styleFrom(backgroundColor: Colors.amber),
-                onPressed:
-                    widget.controllerEmail.text.isNotEmpty &&
-                        widget.controllerPassword.text.isNotEmpty
-                    ? () {
-                        onLoginPressed(context);
-                      }
-                    : null,
-                child: Text('Iniciar sesión'),
-              ),
-            ],
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _controllerPassword,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Ingresa tu contraseña',
+                  ),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Contraseña requerida' : null,
+                ),
+                SizedBox(height: 20),
+                FilledButton(
+                  style: FilledButton.styleFrom(backgroundColor: Colors.amber),
+                  onPressed:
+                      _controllerEmail.text.isNotEmpty &&
+                          _controllerPassword.text.isNotEmpty
+                      ? () {
+                          onLoginPressed(context);
+                        }
+                      : null,
+                  child: Text('Iniciar sesión'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  void onLoginPressed(context) {
+  void onLoginPressed(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => WidgetTree()),
