@@ -3,8 +3,9 @@ import 'package:flutter_application_1/data/notifiers.dart';
 import 'package:flutter_application_1/views/widgets/drawer_widget.dart';
 import 'pages/listado_page.dart';
 import 'pages/item_page.dart';
+import 'pages/settings_page.dart';
 
-List<Widget> pages = [ListadoPage(), ItemPage()];
+List<Widget> pages = [ListadoPage(), ItemPage(), SettingsPage()];
 
 class WidgetTree extends StatelessWidget {
   const WidgetTree({super.key});
@@ -20,12 +21,18 @@ class WidgetTree extends StatelessWidget {
           return pages.elementAt(selectedPage);
         },
       ),
-      floatingActionButton: FloatingActionButton.large(
-        shape: CircleBorder(),
-        backgroundColor: Colors.amber,
-        onPressed: () {},
-        child: const Icon(Icons.add, color: Colors.white),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: ValueListenableBuilder(
+        valueListenable: accentColorNotifier,
+        builder: (context, accentColor, child) {
+          return FloatingActionButton.large(
+            shape: CircleBorder(),
+            backgroundColor: accentColor,
+            onPressed: () {},
+            child: const Icon(Icons.add, color: Colors.white),
+          );
+        },
+      ),
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
