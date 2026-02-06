@@ -17,15 +17,17 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: Form(
             key: _formKey,
             onChanged: () => setState(() {}),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(height: 100),
                 Lottie.asset(
                   'assets/lotties/Stars.json',
                   width: 300,
@@ -39,7 +41,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     style: TextStyle(fontSize: 40),
                   ),
                 ),
-                SizedBox(height: 150),
+                SizedBox(height: 50),
                 TextFormField(
                   controller: _controllerEmail,
                   decoration: InputDecoration(
@@ -57,8 +59,9 @@ class _WelcomePageState extends State<WelcomePage> {
                     border: OutlineInputBorder(),
                     labelText: 'Ingresa tu contraseña',
                   ),
-                  validator: (value) =>
-                      value == null || value.isEmpty ? 'Contraseña requerida' : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Contraseña requerida'
+                      : null,
                 ),
                 SizedBox(height: 20),
                 FilledButton(
