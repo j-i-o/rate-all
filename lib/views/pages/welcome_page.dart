@@ -89,7 +89,7 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   void onLoginPressed(BuildContext context) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => WidgetTree()),
     );
