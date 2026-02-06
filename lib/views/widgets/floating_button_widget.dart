@@ -31,8 +31,8 @@ class _FloatingButtonWidgetState extends State<FloatingButtonWidget> {
               clipBehavior: Clip.none,
               children: [
                 AnimatedPositioned(
-                  duration: const Duration(milliseconds: 250),
-                  bottom: showMenu ? 120 : 0,
+                  duration: const Duration(milliseconds: 150),
+                  bottom: showMenu && widget.newItem ? 120 : 0,
                   right: 0,
                   curve: Curves.easeOut,
                   child: IgnorePointer(
@@ -41,31 +41,7 @@ class _FloatingButtonWidgetState extends State<FloatingButtonWidget> {
                       opacity: showMenu ? 1 : 0,
                       duration: const Duration(milliseconds: 150),
                       child: FloatingActionButton.large(
-                        heroTag: 'fab-folder',
-                        backgroundColor: accentColor,
-                        shape: CircleBorder(),
-                        onPressed: () {},
-                        child: const Icon(
-                          Icons.folder_copy_rounded,
-                          color: Colors.white,
-                          size: 60,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 300),
-                  bottom: showMenu && widget.newItem ? 240 : 0,
-                  right: 0,
-                  curve: Curves.easeOut,
-                  child: IgnorePointer(
-                    ignoring: !showMenu,
-                    child: AnimatedOpacity(
-                      opacity: showMenu ? 1 : 0,
-                      duration: const Duration(milliseconds: 150),
-                      child: FloatingActionButton.large(
-                        heroTag: 'fab-eye',
+                        heroTag: null,
                         backgroundColor: accentColor,
                         shape: CircleBorder(),
                         onPressed: () {},
@@ -78,15 +54,50 @@ class _FloatingButtonWidgetState extends State<FloatingButtonWidget> {
                     ),
                   ),
                 ),
-                FloatingActionButton.large(
-                  heroTag: 'fab-main',
-                  shape: const CircleBorder(),
-                  backgroundColor: showMenu ? Colors.grey[400] : accentColor,
-                  onPressed: () => setState(() => showMenu = !showMenu),
+                IgnorePointer(
+                  ignoring: !showMenu,
+                  child: AnimatedRotation(
+                    turns: showMenu ? 0 : -0.125,
+                    duration: const Duration(milliseconds: 150),
+                    child: AnimatedOpacity(
+                      opacity: showMenu ? 1 : 0,
+                      duration: const Duration(milliseconds: 150),
+                      child: FloatingActionButton.large(
+                        heroTag: null,
+                        backgroundColor: accentColor,
+                        shape: CircleBorder(),
+                        onPressed: () {},
+                        child: const Icon(
+                          Icons.folder_copy_rounded,
+                          color: Colors.white,
+                          size: 60,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                IgnorePointer(
+                  ignoring: showMenu,
                   child: AnimatedRotation(
                     turns: showMenu ? 0.125 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: const Icon(Icons.add, size: 60, color: Colors.white),
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 150),
+                      opacity: showMenu ? 0 : 1,
+                      child: FloatingActionButton.large(
+                        heroTag: 'fab-main',
+                        shape: const CircleBorder(),
+                        backgroundColor: showMenu
+                            ? Colors.grey[400]
+                            : accentColor,
+                        onPressed: () => setState(() => showMenu = !showMenu),
+                        child: const Icon(
+                          Icons.add,
+                          size: 60,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
