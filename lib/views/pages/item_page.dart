@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/item.dart';
+import 'package:flutter_application_1/views/widgets/floating_button_widget.dart';
 import 'package:flutter_application_1/views/widgets/item_card.dart';
 
 class ItemPage extends StatelessWidget {
@@ -70,6 +71,7 @@ class ItemPage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingButtonWidget(newItem: true),
     );
   }
 }
