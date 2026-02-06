@@ -75,6 +75,11 @@ class _WelcomePageState extends State<WelcomePage> {
                       : null,
                   child: Text('Iniciar sesión'),
                 ),
+                FilledButton(
+                  style: FilledButton.styleFrom(backgroundColor: Colors.green),
+                  onPressed: () => onLoginPressed(context),
+                  child: Text('Acceso rápido'),
+                ),
               ],
             ),
           ),
