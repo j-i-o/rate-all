@@ -87,9 +87,7 @@ class _FloatingButtonWidgetState extends State<FloatingButtonWidget> {
                       child: FloatingActionButton.large(
                         heroTag: 'fab-main',
                         shape: const CircleBorder(),
-                        backgroundColor: showMenu
-                            ? Colors.grey[400]
-                            : accentColor,
+                        backgroundColor: accentColor,
                         onPressed: () => setState(() => showMenu = !showMenu),
                         child: const Icon(
                           Icons.add,

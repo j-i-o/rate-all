@@ -12,11 +12,12 @@ class ItemPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: item.color ?? Colors.white,
+        toolbarHeight: 150,
+        backgroundColor: item.color ?? null,
         title: Column(
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Icon(item.icono, size: 50, color: item.color != null ? Colors.white : null),
@@ -31,19 +32,27 @@ class ItemPage extends StatelessWidget {
               ],
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.end,
               spacing: 8,
               children: [
-                Text(
-                  item.reviews?.length.toString() ?? '0',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: item.color != null ? Colors.white : null,
-                  ),
-                ),
-                Icon(
-                  Icons.remove_red_eye_rounded,
-                  color: item.color != null ? Colors.white : null,
+                Row(
+                  spacing: 8,
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      item.reviews?.length.toString() ?? '0',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: item.color != null ? Colors.white : null,
+                      ),
+                    ),
+                    Icon(
+                      Icons.remove_red_eye_rounded,
+                      color: item.color != null ? Colors.white : null,
+                    ),
+                  ],
                 ),
                 Spacer(),
                 IconButton(

@@ -22,8 +22,15 @@ class CategoryCard extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: ListTile(
                 leading: Icon(item.icono, size: 50, color: item.color != null ? Colors.white : null),
-                title: Text(item.nombre, style: TextStyle(fontSize: 24, color: item.color != null ? Colors.white : null)),
-                trailing: Text(item.reviews?.length.toString() ?? '0', style: TextStyle(fontSize: 18, color: item.color != null ? Colors.white : null)),
+                title: Text(item.nombre, style: TextStyle(fontSize: 24, color: item.color != null ? Colors.white : null, overflow: TextOverflow.ellipsis)),
+                trailing: Row(
+                  spacing: 8,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(item.reviews?.length.toString() ?? '0', style: TextStyle(fontSize: 18, color: item.color != null ? Colors.white : null)),
+                    Icon(Icons.remove_red_eye_rounded, color: item.color != null ? Colors.white : null),
+                  ],
+                ),
               ),
             ),
           ],

@@ -28,7 +28,7 @@ class ItemCard extends StatelessWidget {
                 title: Text(item.nombre, style: TextStyle(fontSize: 24)),
                 subtitle: Text(
                   item.descripcion ?? '',
-                  style: TextStyle(fontSize: 16, letterSpacing: 0),
+                  style: TextStyle(fontSize: 16, letterSpacing: 0, overflow: TextOverflow.ellipsis ),
                 ),
                 trailing: RatingWidget(
                   rateTipo: item.rateTipo!,
