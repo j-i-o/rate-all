@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/notifiers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/data/constants.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -44,8 +46,11 @@ class _SettingsPageState extends State<SettingsPage> {
                               child: Text('Rojo'),
                             ),
                           ],
-                          onChanged: (colorSelected) {
+                          onChanged: (colorSelected) async {
                             accentColorNotifier.value = colorSelected!;
+                            final prefs = await SharedPreferences.getInstance();
+                            print(colorSelected.toARGB32());
+                            await prefs.setInt(Constants.accentColorKey, colorSelected.toARGB32());
                           },
                         ),
                       ),

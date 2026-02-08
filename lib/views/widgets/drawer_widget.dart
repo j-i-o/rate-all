@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/constants.dart';
 import 'package:flutter_application_1/data/notifiers.dart';
 import 'package:flutter_application_1/views/pages/settings_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({super.key});
@@ -95,8 +98,12 @@ class DrawerWidget extends StatelessWidget {
                                   isLightMode ? Icons.dark_mode : Icons.sunny,
                                   color: Colors.white,
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   isLightModeNotifier.value = !isLightMode;
+                                  final SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  await prefs.setBool(
+                                      Constants.lightModeKey, isLightModeNotifier.value);
                                 },
                                 iconSize: 40,
                               );
