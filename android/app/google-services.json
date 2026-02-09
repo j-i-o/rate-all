@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "238233869082",
+    "project_id": "rate-all",
+    "storage_bucket": "rate-all.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238233869082:android:105dc981c0d95c8bbaeaa3",
+        "android_client_info": {
+          "package_name": "com.jio.rate_all"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkM8o6tQt8MNzl6Bnbed7VfZFZ0d4DydM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
