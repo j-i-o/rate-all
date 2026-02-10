@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/item.dart';
 
 class NewItem extends StatefulWidget {
-  const NewItem({super.key, required this.categoriaOriginal});
-
-  final Item categoriaOriginal;
+  const NewItem({super.key});
 
   @override
   State<NewItem> createState() => _NewItemState();
@@ -17,7 +15,7 @@ const List<Color> colores = [
   Colors.blue,
   Colors.deepPurple,
   Colors.red,
-  Colors.brown
+  Colors.brown,
 ];
 const List<Icon> iconos = [
   Icon(Icons.star_rounded),
@@ -39,10 +37,7 @@ class _NewItemState extends State<NewItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          children: [
-            const Text('Agregando item', style: TextStyle(color: Colors.white),),
-            const Text('Agregando item', style: TextStyle(color: Colors.white),),
+        title: Column(children: [
           ],
         ),
         backgroundColor: accentColorSelected,
@@ -183,11 +178,16 @@ class _NewItemState extends State<NewItem> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     FilledButton(
-                      style: FilledButton.styleFrom(backgroundColor: accentColorSelected),
-                      onPressed: () { 
+                      style: FilledButton.styleFrom(
+                        backgroundColor: accentColorSelected,
+                      ),
+                      onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('Crear', style: TextStyle(color: Colors.white, fontSize: 20)),
+                      child: Text(
+                        'Crear',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
                     ),
                   ],
                 ),

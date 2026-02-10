@@ -1,32 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/item.dart';
+import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/views/widgets/floating_button_widget.dart';
 import 'package:flutter_application_1/views/widgets/item_card.dart';
 
 class ItemPage extends StatelessWidget {
-  const ItemPage({super.key, required this.item});
+  const ItemPage({super.key, required this.category});
 
-  final Item item;
+  final Category category;
+
+  //Al ingresar a esta pagina hay q traer todos los items de la categoría en donde nos metimos
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 150,
-        backgroundColor: item.color ?? null,
+        backgroundColor: category.color,
         title: Column(
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(item.icono, size: 50, color: item.color != null ? Colors.white : null),
+                Icon(
+                  category.icono,
+                  size: 50,
+                  color: category.color,
+                ),
                 SizedBox(width: 16),
                 Text(
-                  item.nombre,
+                  category.nombre,
                   style: TextStyle(
                     fontSize: 40,
-                    color: item.color != null ? Colors.white : null,
+                    color: category.color,
                   ),
                 ),
               ],
@@ -42,15 +48,15 @@ class ItemPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      item.reviews?.length.toString() ?? '0',
+                      'X',
                       style: TextStyle(
                         fontSize: 20,
-                        color: item.color != null ? Colors.white : null,
+                        color: category.color,
                       ),
                     ),
                     Icon(
                       Icons.remove_red_eye_rounded,
-                      color: item.color != null ? Colors.white : null,
+                      color: category.color,
                     ),
                   ],
                 ),
@@ -60,7 +66,7 @@ class ItemPage extends StatelessWidget {
                   onPressed: () {},
                   icon: Icon(
                     Icons.edit,
-                    color: item.color != null ? Colors.white : null,
+                    color: category.color,
                   ),
                 ),
               ],
@@ -74,9 +80,9 @@ class ItemPage extends StatelessWidget {
         child: Column(
           spacing: 5,
           children: [
-            if(item.reviews != null)
-              for (var item in item.reviews!)
-                ItemCard(item: item)
+            // if(item.reviews != null)
+            //   for (var item in item.reviews!)
+            //     ItemCard(item: item)
           ],
         ),
       ),

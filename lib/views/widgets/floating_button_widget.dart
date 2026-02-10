@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/providers/accent_color_provider.dart';
+import 'package:flutter_application_1/views/pages/new_category.dart';
+import 'package:flutter_application_1/views/pages/new_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FloatingButtonWidget extends ConsumerStatefulWidget {
@@ -44,7 +46,13 @@ class _FloatingButtonWidgetState extends ConsumerState<FloatingButtonWidget> {
                     heroTag: null,
                     backgroundColor: accentColor,
                     shape: CircleBorder(),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NewItem()),
+                      );
+                      setState(() => showMenu = !showMenu);
+                    },
                     child: const Icon(
                       Icons.remove_red_eye_rounded,
                       color: Colors.white,
@@ -66,7 +74,13 @@ class _FloatingButtonWidgetState extends ConsumerState<FloatingButtonWidget> {
                     heroTag: null,
                     backgroundColor: accentColor,
                     shape: CircleBorder(),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NewCategory()),
+                      );
+                      setState(() => showMenu = !showMenu);
+                    },
                     child: const Icon(
                       Icons.folder_copy_rounded,
                       color: Colors.white,

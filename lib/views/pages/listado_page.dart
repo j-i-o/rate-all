@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_application_1/models/item.dart';
+import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/views/widgets/category_card.dart';
 import 'package:flutter_application_1/debug/mock_items.dart';
 
@@ -15,7 +15,9 @@ class ListadoPage extends StatelessWidget {
           spacing: 8,
           mainAxisAlignment: .start,
           children: [
-            for (var item in items) CategoryCard(item: item),
+            for (var item in items)
+            if(item is Category)
+              CategoryCard(category: item),
             SizedBox(height: 120),
             ],
         ),
