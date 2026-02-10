@@ -1,61 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/data/constants.dart';
-import 'package:flutter_application_1/views/pages/welcome_page.dart';
-import 'package:flutter_application_1/data/notifiers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/providers/accent_color_provider.dart';
+import 'package:flutter_application_1/providers/auth_provider.dart';
+import 'package:flutter_application_1/providers/light_mode_provider.dart';
+import 'package:flutter_application_1/views/pages/authenticate/welcome_page.dart';
+import 'package:flutter_application_1/views/widget_tree.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:flutter_application_1/models/app_user.dart';
 
-
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(ProviderScope(child: const MyApp()));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLightMode = ref.watch(lightModeProvider);
+    final accentColor = ref.watch(accentColorProvider);
 
-class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
-
-  @override
-  void initState() {
-    initThemeMode();
-    super.initState();
-  }
-
-  void initThemeMode() async {
-    final prefs = await SharedPreferences.getInstance();
-    final themeMode = prefs.getBool(Constants.lightModeKey);
-    isLightModeNotifier.value = themeMode ?? true;
-
-    final accentColor = prefs.getInt(Constants.accentColorKey);
-    accentColorNotifier.value = Color(accentColor ?? Colors.amber.toARGB32());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: isLightModeNotifier,
-      builder: (context, isLightMode, child) {
-        return ValueListenableBuilder(
-          valueListenable: accentColorNotifier,
-          builder: (context, accentColor, child) {
-            return MaterialApp(
-              title: 'Flutter Demo',
-              theme: ThemeData(
-                fontFamily: 'SN Pro',
-                colorScheme: .fromSeed(
-                  seedColor: accentColorNotifier.value,
-                  brightness: isLightMode ? Brightness.light : Brightness.dark,
-                ),
-              ),
-              home: WelcomePage(),
-            );
-          },
-        );
-      },
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        fontFamily: 'SN Pro',
+        colorScheme: .fromSeed(
+          seedColor: accentColor,
+          brightness: isLightMode ? Brightness.light : Brightness.dark,
+        ),
+      ),
+      home: Consumer(
+        builder: (context, ref, child) {
+          final AsyncValue<AppUser?> user = ref.watch(authProvider);
+          return user.when(
+            data: (value) {
+              if (value == null) {
+                return const WelcomePage();
+              }
+              return const WidgetTree();
+            },
+            error: (error, _) => const Text('Error loading auth status'),
+            loading: () => const Text('Loading...'),
+          );
+        },
+      ),
     );
   }
 }
