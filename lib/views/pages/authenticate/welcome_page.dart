@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/services/auth.dart';
 import 'package:flutter_application_1/views/pages/authenticate/sign_in.dart';
 import 'package:flutter_application_1/views/pages/authenticate/sign_up.dart';
 import 'package:flutter_application_1/views/widget_tree.dart';
@@ -14,9 +13,6 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _controllerEmail = TextEditingController();
-  final TextEditingController _controllerPassword = TextEditingController();
-  final AuthService _auth = AuthService();
   bool isSignUpForm = false;
 
   @override
@@ -95,37 +91,3 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 }
-
-// TextFormField(
-//                   controller: _controllerEmail,
-//                   decoration: InputDecoration(
-//                     border: OutlineInputBorder(),
-//                     labelText: 'Ingresa tu email',
-//                   ),
-//                   validator: (value) =>
-//                       value == null || value.isEmpty ? 'Email requerido' : null,
-//                 ),
-//                 SizedBox(height: 20),
-//                 TextFormField(
-//                   controller: _controllerPassword,
-//                   obscureText: true,
-//                   decoration: InputDecoration(
-//                     border: OutlineInputBorder(),
-//                     labelText: 'Ingresa tu contraseña',
-//                   ),
-//                   validator: (value) => value == null || value.isEmpty
-//                       ? 'Contraseña requerida'
-//                       : null,
-//                 ),
-//                 SizedBox(height: 20),
-//                 FilledButton(
-//                   style: FilledButton.styleFrom(backgroundColor: Colors.amber),
-//                   onPressed:
-//                       _controllerEmail.text.isNotEmpty &&
-//                           _controllerPassword.text.isNotEmpty
-//                       ? () {
-//                           onLoginPressed(context);
-//                         }
-//                       : null,
-//                   child: Text('Iniciar sesión'),
-//                 ),
