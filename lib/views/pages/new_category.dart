@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/domain/rating.dart';
+import 'package:flutter_application_1/models/category.dart';
+import 'package:flutter_application_1/providers/auth_provider.dart';
+import 'package:flutter_application_1/services/database.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NewCategory extends StatefulWidget {
-  const NewCategory({super.key});
+class NewCategory extends ConsumerStatefulWidget {
+  const NewCategory({super.key, this.parentCategory});
+
+  final Category? parentCategory;
 
   @override
-  State<NewCategory> createState() => _NewCategoryState();
+  ConsumerState<NewCategory> createState() => _NewCategoryState();
 }
 
 const List<Color> colores = [
@@ -14,7 +21,7 @@ const List<Color> colores = [
   Colors.blue,
   Colors.deepPurple,
   Colors.red,
-  Colors.brown
+  Colors.brown,
 ];
 const List<Icon> iconos = [
   Icon(Icons.star_rounded),
@@ -24,19 +31,25 @@ const List<Icon> iconos = [
   Icon(Icons.movie_rounded),
 ];
 
-class _NewCategoryState extends State<NewCategory> {
+class _NewCategoryState extends ConsumerState<NewCategory> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final TextEditingController _controllerNombre = TextEditingController();
   final TextEditingController _controllerDescripcion = TextEditingController();
+  final DatabaseService _db = DatabaseService();
+
   Color accentColorSelected = Colors.amber;
   Icon iconSelected = Icon(Icons.star_rounded);
-  late String rateTipoSelected;
+  late String ratingSelected;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nueva Categoria', style: TextStyle(color: Colors.white),),
+        title: const Text(
+          'Nueva Categoria',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: accentColorSelected,
       ),
       body: SingleChildScrollView(
@@ -155,7 +168,7 @@ class _NewCategoryState extends State<NewCategory> {
                         ],
                         onChanged: (value) {
                           if (value != null) {
-                            setState(() => rateTipoSelected = value);
+                            setState(() => ratingSelected = value);
                           }
                         },
                       ),
@@ -175,11 +188,35 @@ class _NewCategoryState extends State<NewCategory> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     FilledButton(
-                      style: FilledButton.styleFrom(backgroundColor: accentColorSelected),
-                      onPressed: () { 
-                        Navigator.pop(context);
+                      style: FilledButton.styleFrom(
+                        backgroundColor: accentColorSelected,
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          final user = ref.read(authProvider).value;
+                          if(user == null) return;
+
+                          final category = Category(
+                            uid: '',
+                            userId: user.uid,
+                            nombre: _controllerNombre.text,
+                            descripcion: _controllerDescripcion.text,
+                            icono: iconSelected.icon!,
+                            color: accentColorSelected,
+                            rating: ratingSelected == 'stars'
+                                ? RatingConfig.stars
+                                : ratingSelected == 'thumbs'
+                                    ? RatingConfig.thumbs
+                                    : RatingConfig.numeric,
+                            parentCategoryId: widget.parentCategory?.uid,
+                          );
+                          _db.createCategory(category);
+                        }
                       },
-                      child: Text('Crear', style: TextStyle(color: Colors.white, fontSize: 20)),
+                      child: Text(
+                        'Crear',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
                     ),
                   ],
                 ),
