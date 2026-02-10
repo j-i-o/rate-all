@@ -1,63 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/data/notifiers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_application_1/data/constants.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_application_1/providers/accent_color_provider.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  ConsumerState createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends ConsumerState<SettingsPage> {
+  static const Color amber = Colors.amber;
+  static const Color blue = Color(0xFF1E88E5);
+  static const Color red = Color(0xFFE53935);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final selectedColor = ref.watch(accentColorProvider);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              ValueListenableBuilder(
-                valueListenable: accentColorNotifier,
-                builder: (context, value, child) {
-                  return Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: DropdownButtonFormField(
-                          isExpanded: true,
-                          initialValue: accentColorNotifier.value,
-                          items: [
-                            DropdownMenuItem(
-                              value: Colors.amber,
-                              child: Text('Amarillo'),
-                            ),
-                            DropdownMenuItem(
-                              value: Colors.blue[600],
-                              child: Text('Azul'),
-                            ),
-                            DropdownMenuItem(
-                              value: Colors.red[600],
-                              child: Text('Rojo'),
-                            ),
-                          ],
-                          onChanged: (colorSelected) async {
-                            accentColorNotifier.value = colorSelected!;
-                            final prefs = await SharedPreferences.getInstance();
-                            print(colorSelected.toARGB32());
-                            await prefs.setInt(Constants.accentColorKey, colorSelected.toARGB32());
-                          },
-                        ),
-                      ),
-                      Expanded(flex: 1, child: Container()),
-                    ],
-                  );
-                },
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: DropdownButton(
+                      isExpanded: true,
+                      value: selectedColor,
+                      items: [
+                        DropdownMenuItem(value: amber, child: Text('Amarillo')),
+                        DropdownMenuItem(value: blue, child: Text('Azul')),
+                        DropdownMenuItem(value: red, child: Text('Rojo')),
+                      ],
+                      onChanged: (color) async {
+                        if (color == null) return;
+                        ref.read(accentColorProvider.notifier).setColor(color);
+                      },
+                    ),
+                  ),
+                  Expanded(flex: 1, child: Container()),
+                ],
               ),
             ],
           ),
