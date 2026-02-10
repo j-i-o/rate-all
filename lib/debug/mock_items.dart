@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/item.dart';
 import 'package:flutter_application_1/models/category.dart';
+import 'package:flutter_application_1/domain/rating.dart';
 
 final List<dynamic> items = [
   Category(
@@ -10,8 +11,7 @@ final List<dynamic> items = [
     descripcion: 'Los mejores restaurantes de la ciudad',
     icono: Icons.bakery_dining,
     color: Colors.amber,
-    rateTipo: 'stars',
-    rateIcon: Icons.star_rounded,
+    rating: RatingConfig.stars,
   ),
   Item(
     uid: '3',
@@ -36,8 +36,7 @@ final List<dynamic> items = [
     descripcion: 'Las mejores películas del año',
     color: Colors.deepPurple,
     icono: Icons.movie,
-    rateTipo: 'thumbs',
-    rateIcon: Icons.thumb_up,
+    rating: RatingConfig.thumbs,
   ),
   Item(
     uid: '5',
@@ -62,8 +61,7 @@ final List<dynamic> items = [
     descripcion: 'Las mejores cafeterías de la city',
     icono: Icons.coffee,
     color: Colors.red,
-    rateTipo: 'number',
-    rateIcon: null,
+    rating: RatingConfig.numeric,
   ),
   Item(
     uid: '7',
@@ -88,8 +86,7 @@ final List<dynamic> items = [
     descripcion: 'Los mejores locales de ropa de la ciudad',
     icono: Icons.emoji_people_rounded,
     color: Colors.blue,
-    rateTipo: 'stars',
-    rateIcon: Icons.star_rounded,
+    rating: RatingConfig.stars,
   ),
   Category(
     uid: '0',
@@ -98,8 +95,7 @@ final List<dynamic> items = [
     descripcion: 'Las mejores casas de té de la ciudad',
     icono: Icons.emoji_food_beverage_rounded,
     color: Colors.green,
-    rateTipo: 'stars',
-    rateIcon: Icons.star_rounded,
+    rating: RatingConfig.stars,
   ),
   Category(
     uid: '0',
@@ -108,8 +104,7 @@ final List<dynamic> items = [
     descripcion: 'Las mejores casas de té de la ciudad',
     icono: Icons.headphones_rounded,
     color: Colors.black,
-    rateTipo: 'stars',
-    rateIcon: Icons.star_rounded,
+    rating: RatingConfig.stars,
   ),
   Category(
     uid: '0',
@@ -118,8 +113,7 @@ final List<dynamic> items = [
     descripcion: 'Las mejores casas de té de la ciudad',
     icono: Icons.brush_rounded,
     color: Colors.deepPurple,
-    rateTipo: 'stars',
-    rateIcon: Icons.star_rounded,
+    rating: RatingConfig.stars,
   ),
   Category(
     uid: '0',
@@ -128,8 +122,7 @@ final List<dynamic> items = [
     descripcion: 'Las mejores casas de té de la ciudad',
     icono: Icons.local_pizza_rounded,
     color: Colors.amber,
-    rateTipo: 'stars',
-    rateIcon: Icons.star_rounded,
+    rating: RatingConfig.stars,
   ),
   Category(
     uid: '0',
@@ -138,8 +131,7 @@ final List<dynamic> items = [
     descripcion: 'Las mejores casas de té de la ciudad',
     icono: Icons.landscape_rounded,
     color: Colors.teal,
-    rateTipo: 'stars',
-    rateIcon: Icons.star_rounded,
+    rating: RatingConfig.stars,
   ),
   Category(
     uid: '0',
@@ -148,8 +140,7 @@ final List<dynamic> items = [
     descripcion: 'Las mejores casas de té de la ciudad',
     icono: Icons.liquor_rounded,
     color: Colors.deepOrange,
-    rateTipo: 'stars',
-    rateIcon: Icons.star_rounded,
+    rating: RatingConfig.stars,
   ),
   Category(
     uid: '0',
@@ -158,7 +149,6 @@ final List<dynamic> items = [
     descripcion: 'Las mejores casas de té de la ciudad',
     icono: Icons.airplanemode_active_rounded,
     color: Colors.pink,
-    rateTipo: 'stars',
-    rateIcon: Icons.star_rounded,
+    rating: RatingConfig.stars,
   ),
 ];
