@@ -63,6 +63,7 @@ class Category extends BaseItem {
     Color? color,
     RatingConfig? rating,
     String? parentId,
+    int? children,
   }) {
     return Category(
       uid: uid ?? this.uid,
@@ -73,6 +74,7 @@ class Category extends BaseItem {
       color: color ?? this.color,
       rating: rating ?? this.rating,
       parentId: parentId ?? this.parentId,
+      children: children ?? this.children,
     );
   }
 }

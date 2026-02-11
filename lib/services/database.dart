@@ -61,6 +61,13 @@ class DatabaseService {
         .map((doc) => baseItemFromMap(doc.data() as Map<String, dynamic>))
         .toList();
   }
+  
+  //No usado
+  Future updateCategoryCount(Category category) async {
+      final childrenCount = await itemCollection.where('parentId', isEqualTo: category.uid).count().get();
+      Category updatedCategory = category.copyWith(children: childrenCount.count);
+      return updatedCategory;
+  }
 
   //getList of items sin parentId
 

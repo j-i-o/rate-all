@@ -109,7 +109,7 @@ class _NewItemState extends ConsumerState<NewItem> {
                               parentId: widget.category.uid,
                             );
                             _db.createItem(item);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           } catch (e) {
                             print(e);
                           }

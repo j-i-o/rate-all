@@ -25,12 +25,23 @@ class _ItemPageState extends ConsumerState<ItemPage> {
   final DatabaseService _db = DatabaseService();
   List<BaseItem> items = [];
   bool _loaded = false;
+  late Category _category;
+
+  @override
+  void initState() {
+    super.initState();
+    _category = widget.category;
+  }
 
   void _loadData(AppUser user) async {
-    final items = await _db.getItems(widget.category, user);
+    setState(() {
+      _loaded = false;
+    });
+    final items = await _db.getItems(_category, user);
     setState(() {
       this.items = items;
       _loaded = true;
+      _category = _category.copyWith(children: items.length);
     });
   }
 
@@ -43,18 +54,18 @@ class _ItemPageState extends ConsumerState<ItemPage> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 150,
-        backgroundColor: widget.category.color,
+        backgroundColor: _category.color,
         title: Column(
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(widget.category.icono, size: 50, color: Colors.white),
+                Icon(_category.icono, size: 50, color: Colors.white),
                 FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Text(
-                    widget.category.nombre,
+                    _category.nombre,
                     style: TextStyle(fontSize: 40, color: Colors.white),
                   ),
                 ),
@@ -71,7 +82,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.category.children.toString(),
+                      _category.children.toString(),
                       style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                     Icon(Icons.remove_red_eye_rounded, color: Colors.white),
@@ -112,8 +123,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            NewItem(category: widget.category),
+                        builder: (context) => NewItem(category: _category),
                       ),
                     ),
                   ),
@@ -146,7 +156,8 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                 right: 16,
                 child: FloatingButtonWidget(
                   newItem: true,
-                  category: widget.category,
+                  category: _category,
+                  onCreated: () => _loadData(user!),
                 ),
               ),
             ],

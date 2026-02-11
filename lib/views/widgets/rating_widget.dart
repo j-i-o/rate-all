@@ -39,9 +39,7 @@ class _RatingWidgetState extends State<RatingWidget> {
 
   void _update(double value) {
     if (!widget.isEditable) return;
-
-    print(value);
-
+    
     setState(() => _currentValue = value);
     widget.onChanged?.call(value);
   }

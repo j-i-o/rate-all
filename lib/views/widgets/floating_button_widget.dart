@@ -6,10 +6,16 @@ import 'package:flutter_application_1/views/pages/new_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FloatingButtonWidget extends ConsumerStatefulWidget {
-  const FloatingButtonWidget({super.key, required this.newItem, this.category});
+  const FloatingButtonWidget({
+    super.key,
+    required this.newItem,
+    this.category,
+    this.onCreated,
+  });
 
   final bool newItem;
   final Category? category;
+  final VoidCallback? onCreated;
 
   @override
   ConsumerState createState() => _FloatingButtonWidgetState();
@@ -64,16 +70,17 @@ class _FloatingButtonWidgetState extends ConsumerState<FloatingButtonWidget> {
                     heroTag: null,
                     backgroundColor: accentColor,
                     shape: CircleBorder(),
-                    onPressed: () {
-                      print("Hell");
-                      Navigator.push(
+                    onPressed: () async {
+                      final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) {
-                            return NewItem(category: widget.category!);
-                          },
+                          builder: (context) =>
+                              NewItem(category: widget.category!),
                         ),
                       );
+                      if (result == true) {
+                        widget.onCreated?.call();
+                      }
                       setState(() => showMenu = !showMenu);
                     },
                     child: const Icon(
@@ -98,11 +105,14 @@ class _FloatingButtonWidgetState extends ConsumerState<FloatingButtonWidget> {
                     heroTag: null,
                     backgroundColor: accentColor,
                     shape: CircleBorder(),
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      final result = await Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => NewCategory()),
                       );
+                      if (result == true) {
+                        widget.onCreated?.call();
+                      }
                       setState(() => showMenu = !showMenu);
                     },
                     child: const Icon(
