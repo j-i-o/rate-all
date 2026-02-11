@@ -51,10 +51,12 @@ class _ItemPageState extends ConsumerState<ItemPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Icon(widget.category.icono, size: 50, color: Colors.white),
-                SizedBox(width: 16),
-                Text(
-                  widget.category.nombre,
-                  style: TextStyle(fontSize: 40, color: Colors.white),
+                FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    widget.category.nombre,
+                    style: TextStyle(fontSize: 40, color: Colors.white),
+                  ),
                 ),
               ],
             ),
@@ -119,16 +121,20 @@ class _ItemPageState extends ConsumerState<ItemPage> {
               ),
             );
           } else {
-            content = ListView(
-              padding: const EdgeInsets.all(10),
-              children: items.map((i) {
-                if (i is Item) {
-                  return ItemCard(item: i);
-                } else if (i is Category) {
-                  return CategoryCard(category: i);
-                }
-                return const SizedBox.shrink();
-              }).toList(),
+            content = RefreshIndicator(
+              color: accentColor,
+              onRefresh: () async => _loadData(user!),
+              child: ListView(
+                padding: const EdgeInsets.all(10),
+                children: items.map((i) {
+                  if (i is Item) {
+                    return ItemCard(item: i);
+                  } else if (i is Category) {
+                    return CategoryCard(category: i);
+                  }
+                  return const SizedBox.shrink();
+                }).toList(),
+              ),
             );
           }
 
