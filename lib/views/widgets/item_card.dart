@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/domain/rating.dart';
 import 'package:flutter_application_1/models/item.dart';
 import 'package:flutter_application_1/views/widgets/rating_widget.dart';
 
@@ -21,7 +22,7 @@ class ItemCard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(8.0),
               child: ListTile(
-                title: Text(item.nombre, style: TextStyle(fontSize: 24)),
+                title: Text(item.nombre, style: TextStyle(fontSize: 20)),
                 subtitle: Text(
                   item.descripcion ?? '',
                   style: TextStyle(
@@ -31,9 +32,9 @@ class ItemCard extends StatelessWidget {
                   ),
                 ),
                 trailing: RatingWidget(
-                  rateTipo: 'stars',
-                  rateValue: item.rateValue,
-                  rateIcon: Icons.stars_rounded,
+                  //Cambiar por el rating de la categoría! O sea que hay q pasarle a la ItemCard la categoria
+                  rating: RatingConfig.stars,
+                  value: item.rateValue,
                 ),
               ),
             ),
