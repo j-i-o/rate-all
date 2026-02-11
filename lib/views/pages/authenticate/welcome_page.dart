@@ -71,11 +71,6 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ],
                   ),
-                FilledButton(
-                  style: FilledButton.styleFrom(backgroundColor: Colors.green),
-                  onPressed: () => onLoginPressed(context),
-                  child: Text('Acceso rápido'),
-                ),
               ],
             ),
           ),
