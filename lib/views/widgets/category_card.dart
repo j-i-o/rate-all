@@ -27,8 +27,8 @@ class CategoryCard extends StatelessWidget {
                   spacing: 8,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('X', style: TextStyle(fontSize: 18, color: category.color)),
-                    Icon(Icons.remove_red_eye_rounded, color: category.color),
+                    Text(category.children.toString(), style: TextStyle(fontSize: 18, color: Colors.white)),
+                    Icon(Icons.remove_red_eye_rounded, color: Colors.white),
                   ],
                 ),
               ),
