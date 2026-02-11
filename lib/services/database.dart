@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_application_1/models/app_user.dart';
+import 'package:flutter_application_1/models/base_item.dart';
 import 'package:flutter_application_1/models/item.dart';
 import 'package:flutter_application_1/models/category.dart';
 
@@ -23,9 +24,7 @@ class DatabaseService {
         .get();
 
     return snapshot.docs
-        .map(
-          (doc) => Category.fromMap(doc.data() as Map<String, dynamic>),
-        )
+        .map((doc) => Category.fromMap(doc.data() as Map<String, dynamic>))
         .toList();
   }
 
@@ -35,6 +34,18 @@ class DatabaseService {
     final categoryWithId = category.copyWith(uid: docRef.id);
 
     await docRef.set(categoryWithId.toMap());
+  }
+
+  Future getItems(Category category, AppUser user) async {
+    final snapshot = await itemCollection
+        .where('userId', isEqualTo: user.uid)
+        .where('parentCategoryId', isEqualTo: category.uid)
+        .where('categoryId', isEqualTo: category.uid)
+        .get();
+
+    return snapshot.docs
+        .map((doc) => baseItemFromMap(doc.data() as Map<String, dynamic>))
+        .toList();
   }
 
   //getList of items sin parentId
