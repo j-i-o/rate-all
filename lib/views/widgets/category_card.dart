@@ -10,7 +10,10 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ItemPage(category: category))),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ItemPage(category: category)),
+      ),
       onHorizontalDragStart: (details) => print(details),
       child: Card.outlined(
         color: category.color,
@@ -19,15 +22,21 @@ class CategoryCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
                 leading: Icon(category.icono, size: 50, color: Colors.white),
-                title: Text(category.nombre, style: TextStyle(fontSize: 24, color: Colors.white, overflow: TextOverflow.ellipsis)),
+                title: Text(
+                  category.nombre,
+                  style: TextStyle(fontSize: 20, color: Colors.white, overflow: TextOverflow.ellipsis),
+                ),
                 trailing: Row(
                   spacing: 8,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(category.children.toString(), style: TextStyle(fontSize: 18, color: Colors.white)),
+                    Text(
+                      category.children.toString(),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
                     Icon(Icons.remove_red_eye_rounded, color: Colors.white),
                   ],
                 ),
