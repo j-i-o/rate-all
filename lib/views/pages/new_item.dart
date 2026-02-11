@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/models/item.dart';
 
 class NewItem extends StatefulWidget {
-  const NewItem({super.key});
+  const NewItem({super.key, required this.category});
+
+  final Category category;
 
   @override
   State<NewItem> createState() => _NewItemState();
 }
-
 const List<Color> colores = [
   Colors.amber,
   Colors.green,
@@ -17,6 +19,7 @@ const List<Color> colores = [
   Colors.red,
   Colors.brown,
 ];
+
 const List<Icon> iconos = [
   Icon(Icons.star_rounded),
   Icon(Icons.ac_unit_rounded),
@@ -31,7 +34,7 @@ class _NewItemState extends State<NewItem> {
   final TextEditingController _controllerDescripcion = TextEditingController();
   Color accentColorSelected = Colors.amber;
   Icon iconSelected = Icon(Icons.star_rounded);
-  late String rateTipoSelected;
+  late String ratingSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +161,7 @@ class _NewItemState extends State<NewItem> {
                         ],
                         onChanged: (value) {
                           if (value != null) {
-                            setState(() => rateTipoSelected = value);
+                            setState(() => ratingSelected = value);
                           }
                         },
                       ),

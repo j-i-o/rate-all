@@ -208,7 +208,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                                 : ratingSelected == 'thumbs'
                                     ? RatingConfig.thumbs
                                     : RatingConfig.numeric,
-                            parentCategoryId: widget.parentCategory?.uid,
+                            parentId: widget.parentCategory?.uid,
                           );
                           _db.createCategory(category);
                         }
