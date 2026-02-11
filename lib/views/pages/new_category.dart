@@ -193,24 +193,29 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          final user = ref.read(authProvider).value;
-                          if(user == null) return;
+                          try {
+                            final user = ref.read(authProvider).value;
+                            if (user == null) return;
 
-                          final category = Category(
-                            uid: '',
-                            userId: user.uid,
-                            nombre: _controllerNombre.text,
-                            descripcion: _controllerDescripcion.text,
-                            icono: iconSelected.icon!,
-                            color: accentColorSelected,
-                            rating: ratingSelected == 'stars'
-                                ? RatingConfig.stars
-                                : ratingSelected == 'thumbs'
-                                    ? RatingConfig.thumbs
-                                    : RatingConfig.numeric,
-                            parentId: widget.parentCategory?.uid,
-                          );
-                          _db.createCategory(category);
+                            final category = Category(
+                              uid: '',
+                              userId: user.uid,
+                              nombre: _controllerNombre.text,
+                              descripcion: _controllerDescripcion.text,
+                              icono: iconSelected.icon!,
+                              color: accentColorSelected,
+                              rating: ratingSelected == 'stars'
+                                  ? RatingConfig.stars
+                                  : ratingSelected == 'thumbs'
+                                  ? RatingConfig.thumbs
+                                  : RatingConfig.numeric,
+                              parentId: widget.parentCategory?.uid,
+                            );
+                            _db.createCategory(category);
+                            Navigator.pop(context);
+                          } catch (e) {
+                            print(e);
+                          }
                         }
                       },
                       child: Text(
