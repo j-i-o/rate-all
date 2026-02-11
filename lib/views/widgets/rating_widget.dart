@@ -1,39 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/domain/rating.dart';
 
-class RatingWidget extends StatelessWidget {
+class RatingWidget extends StatefulWidget {
   const RatingWidget({
     super.key,
-    required this.rateTipo,
-    required this.rateValue,
-    this.rateIcon,
+    required this.rating,
+    this.value,
+    this.onChanged,
   });
 
-  final String rateTipo;
-  final IconData? rateIcon;
-  final double rateValue;
+  final RatingConfig rating;
+  final double? value;
+  final ValueChanged<double>? onChanged;
+
+  //computada??
+  bool get isEditable => onChanged != null;
+
+  @override
+  State<RatingWidget> createState() => _RatingWidgetState();
+}
+
+class _RatingWidgetState extends State<RatingWidget> {
+  late double _currentValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentValue = widget.value ?? 0;
+  }
+
+  @override
+  void didUpdateWidget(covariant RatingWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      _currentValue = widget.value ?? 0;
+    }
+  }
+
+  void _update(double value) {
+    if (!widget.isEditable) return;
+
+    print(value);
+
+    setState(() => _currentValue = value);
+    widget.onChanged?.call(value);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final value = widget.isEditable ? _currentValue : widget.value ?? 0;
+
     return Row(
+      spacing: 0,
       mainAxisSize: MainAxisSize.min,
-      children: switch (rateTipo) {
-        'thumbs' => [
+      children: switch (widget.rating.type) {
+        RatingType.thumbs => [
           Icon(
-            rateValue > 0 ? Icons.thumb_up_rounded : Icons.thumb_down_rounded,
-            color: rateValue > 0 ? Colors.green : Colors.red,
+            value > 0 ? Icons.thumb_up_rounded : Icons.thumb_down_rounded,
+            color: value > 0 ? Colors.green : Colors.red,
           ),
         ],
-        'stars' => List.generate(
+        RatingType.stars => List.generate(
           5,
-          (index) => Icon(rateIcon ?? Icons.star_rounded, color: index < rateValue ? Colors.amber : Colors.grey),
+          (index) => widget.isEditable
+              ? IconButton(
+                  onPressed: widget.isEditable
+                      ? () => _update(index + 1)
+                      : null,
+                  icon: Icon(
+                    Icons.star_rounded,
+                    color: index < value ? Colors.amber : Colors.grey,
+                  ),
+                )
+              : Icon(
+                  Icons.star_rounded,
+                  color: index < value ? Colors.amber : Colors.grey,
+                ),
         ),
-        'number' => [
+        RatingType.numeric => [
           Text(
-            '$rateValue/10',
+            '$value/10',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ],
-        _ => [],
       },
     );
   }
