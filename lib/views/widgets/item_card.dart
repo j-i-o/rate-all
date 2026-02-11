@@ -20,22 +20,34 @@ class ItemCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: EdgeInsets.all(8.0),
-              child: ListTile(
-                title: Text(item.nombre, style: TextStyle(fontSize: 20)),
-                subtitle: Text(
-                  item.descripcion ?? '',
-                  style: TextStyle(
-                    fontSize: 16,
-                    letterSpacing: 0,
-                    overflow: TextOverflow.ellipsis,
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right:10.0, top: 5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        RatingWidget(
+                          //Cambiar por el rating de la categoría! O sea que hay q pasarle a la ItemCard la categoria
+                          rating: RatingConfig.stars,
+                          value: item.rateValue,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                trailing: RatingWidget(
-                  //Cambiar por el rating de la categoría! O sea que hay q pasarle a la ItemCard la categoria
-                  rating: RatingConfig.stars,
-                  value: item.rateValue,
-                ),
+                  ListTile(
+                    title: Text(item.nombre, style: TextStyle(fontSize: 20)),
+                    subtitle: Text(
+                      item.descripcion ?? '',
+                      style: TextStyle(
+                        fontSize: 16,
+                        letterSpacing: 0,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -53,6 +53,12 @@ class _ItemPageState extends ConsumerState<ItemPage> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          iconSize: 25,
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+        ),
         toolbarHeight: 150,
         backgroundColor: _category.color,
         title: Column(
@@ -60,6 +66,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
+              spacing: 5,
               children: [
                 Icon(_category.icono, size: 50, color: Colors.white),
                 FittedBox(
