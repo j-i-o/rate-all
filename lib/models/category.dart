@@ -7,23 +7,25 @@ class Category extends BaseItem {
   final Color color;
   final RatingConfig rating;
   final String? parentId;
+  final int? children;
 
   Category({
     required super.uid,
     required super.userId,
     required super.nombre,
-    super.category = 'category',
+    super.type = 'category',
     super.descripcion,
     required this.icono,
     required this.color,
     required this.rating,
     this.parentId,
+    this.children,
   });
 
   Map<String, dynamic> toMap() => {
     'uid': uid,
     'userId': userId,
-    'category': category,
+    'type': type,
     'nombre': nombre,
     'descripcion': descripcion,
     'iconoCode': icono.codePoint,
@@ -32,12 +34,13 @@ class Category extends BaseItem {
     'color': color.toARGB32(),
     'rating': rating.toMap(),
     'parentId': parentId,
+    'children': children,
   };
 
   factory Category.fromMap(Map<String, dynamic> map) => Category(
     uid: map['uid'],
     userId: map['userId'],
-    category: map['category'],
+    type: map['type'],
     nombre: map['nombre'],
     descripcion: map['descripcion'],
     icono: IconData(
@@ -48,6 +51,7 @@ class Category extends BaseItem {
     color: Color(map['color']),
     rating: RatingConfig.fromMap(map['rating']),
     parentId: map['parentId'],
+    children: map['children'],
   );
 
   Category copyWith({
