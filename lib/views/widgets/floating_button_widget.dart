@@ -6,7 +6,7 @@ import 'package:flutter_application_1/views/pages/new_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FloatingButtonWidget extends ConsumerStatefulWidget {
-  const FloatingButtonWidget({super.key, required this.newItem, this.category });
+  const FloatingButtonWidget({super.key, required this.newItem, this.category});
 
   final bool newItem;
   final Category? category;
@@ -24,16 +24,32 @@ class _FloatingButtonWidgetState extends ConsumerState<FloatingButtonWidget> {
 
     return TapRegion(
       onTapOutside: (event) => setState(() => showMenu = false),
-      child: OverflowBox(
-        alignment: Alignment.bottomRight,
-        minWidth: 0,
-        minHeight: 0,
-        maxWidth: double.infinity,
-        maxHeight: double.infinity,
+      child: SizedBox(
+        height: 200,
+        width: 200,
         child: Stack(
           alignment: Alignment.bottomRight,
           clipBehavior: Clip.none,
           children: [
+            IgnorePointer(
+              //MAIN FAB
+              ignoring: showMenu,
+              child: AnimatedRotation(
+                turns: showMenu ? 0.125 : 0,
+                duration: const Duration(milliseconds: 200),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 150),
+                  opacity: showMenu ? 0 : 1,
+                  child: FloatingActionButton.large(
+                    heroTag: 'fab-main',
+                    shape: const CircleBorder(),
+                    backgroundColor: accentColor,
+                    onPressed: () => setState(() => showMenu = !showMenu),
+                    child: const Icon(Icons.add, size: 60, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
             AnimatedPositioned(
               duration: const Duration(milliseconds: 150),
               bottom: showMenu && widget.newItem ? 120 : 0,
@@ -49,9 +65,14 @@ class _FloatingButtonWidgetState extends ConsumerState<FloatingButtonWidget> {
                     backgroundColor: accentColor,
                     shape: CircleBorder(),
                     onPressed: () {
+                      print("Hell");
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => NewItem(category: widget.category!,)),
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return NewItem(category: widget.category!);
+                          },
+                        ),
                       );
                       setState(() => showMenu = !showMenu);
                     },
@@ -65,6 +86,7 @@ class _FloatingButtonWidgetState extends ConsumerState<FloatingButtonWidget> {
               ),
             ),
             IgnorePointer(
+              //NEW CATEGORY
               ignoring: !showMenu,
               child: AnimatedRotation(
                 turns: showMenu ? 0 : -0.125,
@@ -88,24 +110,6 @@ class _FloatingButtonWidgetState extends ConsumerState<FloatingButtonWidget> {
                       color: Colors.white,
                       size: 60,
                     ),
-                  ),
-                ),
-              ),
-            ),
-            IgnorePointer(
-              ignoring: showMenu,
-              child: AnimatedRotation(
-                turns: showMenu ? 0.125 : 0,
-                duration: const Duration(milliseconds: 200),
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 150),
-                  opacity: showMenu ? 0 : 1,
-                  child: FloatingActionButton.large(
-                    heroTag: 'fab-main',
-                    shape: const CircleBorder(),
-                    backgroundColor: accentColor,
-                    onPressed: () => setState(() => showMenu = !showMenu),
-                    child: const Icon(Icons.add, size: 60, color: Colors.white),
                   ),
                 ),
               ),
