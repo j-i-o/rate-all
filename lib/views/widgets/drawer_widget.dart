@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/constants.dart';
 import 'package:flutter_application_1/providers/accent_color_provider.dart';
+import 'package:flutter_application_1/providers/auth_provider.dart';
 import 'package:flutter_application_1/providers/light_mode_provider.dart';
 import 'package:flutter_application_1/services/auth.dart';
 import 'package:flutter_application_1/views/pages/settings_page.dart';
@@ -21,22 +22,26 @@ class DrawerWidget extends ConsumerWidget {
           Container(
             height: 200,
             padding: const EdgeInsets.only(top: 25, right: 10, bottom: 40),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'RateAll',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'RateAll',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Icon(Icons.star_rounded, color: Colors.white, size: 50),
-                ],
-              ),
+                    Icon(Icons.star_rounded, color: Colors.white, size: 50),
+                  ],
+                ),
+                Text(ref.watch(authProvider).value!.email, style: TextStyle(color: Colors.white, fontSize: 30)),
+              ],
             ),
           ),
           ListTile(
