@@ -26,6 +26,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
   List<BaseItem> items = [];
   bool _loaded = false;
   late Category _category;
+  bool modificado = false;
 
   @override
   void initState() {
@@ -45,6 +46,13 @@ class _ItemPageState extends ConsumerState<ItemPage> {
     });
   }
 
+  void _onItemCreated(user) async {
+    setState(() {
+      modificado = true;
+    });
+    _loadData(user);
+  }
+
   //Al ingresar a esta pagina hay q traer todos los items de la categoría en donde nos metimos
   @override
   Widget build(BuildContext context) {
@@ -56,7 +64,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
         automaticallyImplyLeading: false,
         leading: IconButton(
           iconSize: 25,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context, modificado),
           icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
         toolbarHeight: 150,
@@ -169,7 +177,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                 child: FloatingButtonWidget(
                   newItem: true,
                   category: _category,
-                  onCreated: () => _loadData(user!),
+                  onCreated: () => _onItemCreated(user!),
                 ),
               ),
             ],

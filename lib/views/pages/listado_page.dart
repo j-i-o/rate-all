@@ -78,7 +78,10 @@ class _ListadoPageState extends ConsumerState<ListadoPage> {
             child: ListView(
               padding: const EdgeInsets.all(20.0),
               children: categoriesFetched.map((category) {
-                return CategoryCard(category: category);
+                return CategoryCard(
+                  category: category,
+                  onMainCategoryChanged: () => _loadData(user!),
+                );
               }).toList(),
             ),
           );
