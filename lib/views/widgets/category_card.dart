@@ -15,7 +15,7 @@ class CategoryCard extends StatelessWidget {
         MaterialPageRoute(builder: (context) => ItemPage(category: category)),
       ),
       onHorizontalDragStart: (details) => print(details),
-      child: Card.outlined(
+      child: Card(
         color: category.color,
         elevation: 0,
         child: Column(
