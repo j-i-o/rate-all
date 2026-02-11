@@ -53,13 +53,21 @@ class DatabaseService {
 
   Future getItems(Category category, AppUser user) async {
     final snapshot = await itemCollection
-        .where('userId', isEqualTo: user.uid)
         .where('parentId', isEqualTo: category.uid)
         .get();
-        
-    return snapshot.docs
+    List<BaseItem> items = snapshot.docs
         .map((doc) => baseItemFromMap(doc.data() as Map<String, dynamic>))
         .toList();
+
+    for (final item in items) {
+      if (item is Category) {
+        final childrenCount = await itemCollection.where('parentId', isEqualTo: item.uid).count().get();
+        Category updatedCategory = item.copyWith(children: childrenCount.count);
+        items[items.indexOf(item)] = updatedCategory;
+      }
+    }
+
+    return items;
   }
   
   //No usado
