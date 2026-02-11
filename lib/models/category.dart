@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/rating.dart';
+import 'package:flutter_application_1/models/base_item.dart';
 
-class Category {
-  final String uid;
-  final String userId;
-  final String nombre;
-  final String? descripcion;
+class Category extends BaseItem {
   final IconData icono;
   final Color color;
   final RatingConfig rating;
-  final String? parentCategoryId;
+  final String? parentId;
 
-  const Category({
-    required this.uid,
-    required this.userId,
-    required this.nombre,
-    this.descripcion,
+  Category({
+    required super.uid,
+    required super.userId,
+    required super.nombre,
+    super.category = 'category',
+    super.descripcion,
     required this.icono,
     required this.color,
     required this.rating,
-    this.parentCategoryId,
+    this.parentId,
   });
 
   Map<String, dynamic> toMap() => {
     'uid': uid,
     'userId': userId,
+    'category': category,
     'nombre': nombre,
     'descripcion': descripcion,
     'iconoCode': icono.codePoint,
@@ -32,12 +31,13 @@ class Category {
     'iconoPackage': icono.fontPackage,
     'color': color.toARGB32(),
     'rating': rating.toMap(),
-    'parentCategoryId': parentCategoryId,
+    'parentId': parentId,
   };
 
   factory Category.fromMap(Map<String, dynamic> map) => Category(
     uid: map['uid'],
     userId: map['userId'],
+    category: map['category'],
     nombre: map['nombre'],
     descripcion: map['descripcion'],
     icono: IconData(
@@ -47,7 +47,7 @@ class Category {
     ),
     color: Color(map['color']),
     rating: RatingConfig.fromMap(map['rating']),
-    parentCategoryId: map['parentCategoryId'],
+    parentId: map['parentId'],
   );
 
   Category copyWith({
@@ -58,7 +58,7 @@ class Category {
     IconData? icono,
     Color? color,
     RatingConfig? rating,
-    String? parentCategoryId,
+    String? parentId,
   }) {
     return Category(
       uid: uid ?? this.uid,
@@ -68,7 +68,7 @@ class Category {
       icono: icono ?? this.icono,
       color: color ?? this.color,
       rating: rating ?? this.rating,
-      parentCategoryId: parentCategoryId ?? this.parentCategoryId,
+      parentId: parentId ?? this.parentId,
     );
   }
 }
