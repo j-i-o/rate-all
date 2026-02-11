@@ -20,12 +20,19 @@ class DatabaseService {
   Future getMainCategories(AppUser user) async {
     final snapshot = await itemCollection
         .where('userId', isEqualTo: user.uid)
-        .where('parentCategoryId', isNull: true)
+        .where('parentId', isNull: true)
         .get();
 
-    return snapshot.docs
-        .map((doc) => Category.fromMap(doc.data() as Map<String, dynamic>))
-        .toList();
+    List<Category> categories = [];
+
+    for (final doc in snapshot.docs) {
+      final childrenCount = await itemCollection.where('parentId', isEqualTo: doc.id).count().get();
+      final data = Map<String, dynamic>.from(doc.data() as Map<String, dynamic>);
+      data['children'] = childrenCount.count;
+      categories.add(Category.fromMap(data));
+    }
+
+    return categories;
   }
 
   Future createCategory(Category category) async {
@@ -36,13 +43,20 @@ class DatabaseService {
     await docRef.set(categoryWithId.toMap());
   }
 
+  Future createItem(Item item) async {
+    final docRef = itemCollection.doc();
+
+    final itemWithId = item.copyWith(uid: docRef.id);
+
+    await docRef.set(itemWithId.toMap());
+  }
+
   Future getItems(Category category, AppUser user) async {
     final snapshot = await itemCollection
         .where('userId', isEqualTo: user.uid)
-        .where('parentCategoryId', isEqualTo: category.uid)
-        .where('categoryId', isEqualTo: category.uid)
+        .where('parentId', isEqualTo: category.uid)
         .get();
-
+        
     return snapshot.docs
         .map((doc) => baseItemFromMap(doc.data() as Map<String, dynamic>))
         .toList();
