@@ -150,7 +150,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                 padding: const EdgeInsets.all(10),
                 children: items.map((i) {
                   if (i is Item) {
-                    return ItemCard(item: i);
+                    return ItemCard(item: i, color: _category.color);
                   } else if (i is Category) {
                     return CategoryCard(category: i);
                   }
