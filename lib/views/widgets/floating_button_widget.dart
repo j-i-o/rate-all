@@ -108,7 +108,7 @@ class _FloatingButtonWidgetState extends ConsumerState<FloatingButtonWidget> {
                     onPressed: () async {
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => NewCategory()),
+                        MaterialPageRoute(builder: (context) => NewCategory(parentCategory: widget.category,)),
                       );
                       if (result == true) {
                         widget.onCreated?.call();
