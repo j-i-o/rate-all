@@ -40,7 +40,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
   final DatabaseService _db = DatabaseService();
 
   late Color accentColorSelected =
-      ref.read(accentColorProvider) ?? Colors.amber;
+      widget.parentCategory?.color ?? ref.read(accentColorProvider);
   Icon iconSelected = Icon(Icons.star_rounded);
   late String ratingSelected;
 
@@ -48,9 +48,38 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Nueva Categoria',
-          style: TextStyle(color: Colors.white),
+        toolbarHeight: 120,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          iconSize: 25,
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+        ),
+        title: Column(
+          spacing: 10,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Nueva categoría',
+              style: TextStyle(fontSize: 30, color: Colors.white),
+            ),
+            if (widget.parentCategory != null)
+              Row(
+                spacing: 5,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    widget.parentCategory!.icono,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    widget.parentCategory!.nombre,
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                ],
+              ),
+          ],
         ),
         backgroundColor: accentColorSelected,
       ),

@@ -24,20 +24,32 @@ class _NewItemState extends ConsumerState<NewItem> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 120,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          iconSize: 25,
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+        ),
         title: Column(
           spacing: 10,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Nuevo item', style: TextStyle(fontSize: 30)),
+            Text(
+              'Nuevo item',
+              style: TextStyle(fontSize: 30, color: Colors.white),
+            ),
             Row(
+              spacing: 5,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(widget.category.icono, size: 30),
-                Text(widget.category.nombre),
+                Icon(widget.category.icono, size: 30, color: Colors.white),
+                Text(
+                  widget.category.nombre,
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
               ],
             ),
           ],
