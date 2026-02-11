@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/providers/accent_color_provider.dart';
 import 'package:flutter_application_1/views/pages/new_category.dart';
 import 'package:flutter_application_1/views/pages/new_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FloatingButtonWidget extends ConsumerStatefulWidget {
-  const FloatingButtonWidget({super.key, required this.newItem});
+  const FloatingButtonWidget({super.key, required this.newItem, this.category });
 
   final bool newItem;
+  final Category? category;
 
   @override
   ConsumerState createState() => _FloatingButtonWidgetState();
@@ -49,7 +51,7 @@ class _FloatingButtonWidgetState extends ConsumerState<FloatingButtonWidget> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => NewItem()),
+                        MaterialPageRoute(builder: (context) => NewItem(category: widget.category!,)),
                       );
                       setState(() => showMenu = !showMenu);
                     },
