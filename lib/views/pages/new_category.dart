@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/rating.dart';
 import 'package:flutter_application_1/models/category.dart';
+import 'package:flutter_application_1/providers/accent_color_provider.dart';
 import 'package:flutter_application_1/providers/auth_provider.dart';
 import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,7 +39,8 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
   final TextEditingController _controllerDescripcion = TextEditingController();
   final DatabaseService _db = DatabaseService();
 
-  Color accentColorSelected = Colors.amber;
+  late Color accentColorSelected =
+      ref.read(accentColorProvider) ?? Colors.amber;
   Icon iconSelected = Icon(Icons.star_rounded);
   late String ratingSelected;
 
@@ -121,7 +123,11 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                             child: i,
                           );
                         }).toList(),
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() => iconSelected = value);
+                          }
+                        },
                       ),
                     ),
                   ],
@@ -212,7 +218,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                               parentId: widget.parentCategory?.uid,
                             );
                             _db.createCategory(category);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           } catch (e) {
                             print(e);
                           }

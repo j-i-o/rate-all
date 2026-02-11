@@ -5,6 +5,7 @@ import 'package:flutter_application_1/providers/accent_color_provider.dart';
 import 'package:flutter_application_1/views/widgets/category_card.dart';
 import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_application_1/providers/auth_provider.dart';
+import 'package:flutter_application_1/views/widgets/floating_button_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_1/views/pages/new_category.dart';
 
@@ -21,6 +22,9 @@ class _ListadoPageState extends ConsumerState<ListadoPage> {
   bool _loaded = false;
 
   void _loadData(AppUser user) async {
+    setState(() {
+      _loaded = false;
+    });
     final items = await _db.getMainCategories(user);
     setState(() {
       categoriesFetched = items;
@@ -41,8 +45,11 @@ class _ListadoPageState extends ConsumerState<ListadoPage> {
           _loadData(user!);
           return const Center(child: CircularProgressIndicator());
         }
+
+        Widget content;
+
         if (categoriesFetched.isEmpty) {
-          return Center(
+          content = Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -59,20 +66,31 @@ class _ListadoPageState extends ConsumerState<ListadoPage> {
               ],
             ),
           );
-        }
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              spacing: 8,
-              mainAxisAlignment: .start,
-              children: [
-                for (var category in categoriesFetched)
-                  CategoryCard(category: category),
-                SizedBox(height: 120),
-              ],
+        } else {
+          content = RefreshIndicator(
+            color: accentColor,
+            onRefresh: () async => _loadData(user!),
+            child: ListView(
+              padding: const EdgeInsets.all(20.0),
+              children: categoriesFetched.map((category) {
+                return CategoryCard(category: category);
+              }).toList(),
             ),
-          ),
+          );
+        }
+
+        return Stack(
+          children: [
+            content,
+            Positioned(
+              bottom: 50,
+              right: 30,
+              child: FloatingButtonWidget(
+                newItem: false,
+                onCreated: () => _loadData(user!),
+              ),
+            ),
+          ],
         );
       },
     );

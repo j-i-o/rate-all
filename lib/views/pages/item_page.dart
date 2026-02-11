@@ -152,8 +152,8 @@ class _ItemPageState extends ConsumerState<ItemPage> {
             children: [
               content,
               Positioned(
-                bottom: 16,
-                right: 16,
+                bottom: 50,
+                right: 30,
                 child: FloatingButtonWidget(
                   newItem: true,
                   category: _category,
