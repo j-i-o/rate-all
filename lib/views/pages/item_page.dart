@@ -120,12 +120,17 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                   FilledButton(
                     style: FilledButton.styleFrom(backgroundColor: accentColor),
                     child: Text('Crear item'),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NewItem(category: _category),
-                      ),
-                    ),
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NewItem(category: _category),
+                        ),
+                      );
+                      if (result == true) {
+                        _loadData(user!);
+                      }
+                    },
                   ),
                 ],
               ),
@@ -152,7 +157,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
             children: [
               content,
               Positioned(
-                bottom: 50,
+                bottom: 45,
                 right: 30,
                 child: FloatingButtonWidget(
                   newItem: true,

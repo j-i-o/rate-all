@@ -58,10 +58,15 @@ class _ListadoPageState extends ConsumerState<ListadoPage> {
                 FilledButton(
                   style: FilledButton.styleFrom(backgroundColor: accentColor),
                   child: Text('Crear categoria'),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NewCategory()),
-                  ),
+                  onPressed: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NewCategory()),
+                    );
+                    if (result != null) {
+                      _loadData(user!);
+                    }
+                  },
                 ),
               ],
             ),
@@ -83,7 +88,7 @@ class _ListadoPageState extends ConsumerState<ListadoPage> {
           children: [
             content,
             Positioned(
-              bottom: 50,
+              bottom: 45,
               right: 30,
               child: FloatingButtonWidget(
                 newItem: false,
