@@ -110,9 +110,16 @@ class _SwipeableCardState extends State<SwipeableCard>
             AnimatedBuilder(
               animation: _controller,
               builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(_controller.value, 0),
-                  child: child,
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    final fullWidth = constraints.maxWidth;
+                    final visibleWidth = fullWidth + _controller.value;
+
+                    return Align(
+                      alignment: Alignment.centerLeft,
+                      child: SizedBox(width: visibleWidth, child: child),
+                    );
+                  },
                 );
               },
               child: GestureDetector(
@@ -150,7 +157,7 @@ class _ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: SizedBox(
         width: 60,
         child: Material(
