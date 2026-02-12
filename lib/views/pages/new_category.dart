@@ -3,6 +3,8 @@ import 'package:flutter_application_1/domain/rating.dart';
 import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/providers/accent_color_provider.dart';
 import 'package:flutter_application_1/providers/auth_provider.dart';
+import 'package:flutter_application_1/providers/category_provider.dart';
+import 'package:flutter_application_1/providers/item_provider.dart';
 import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -98,6 +100,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                     Flexible(
                       flex: 4,
                       child: TextFormField(
+                        textCapitalization: TextCapitalization.sentences,
                         controller: _controllerNombre,
                         decoration: InputDecoration(
                           labelText: 'Nombre',
@@ -211,6 +214,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                   ],
                 ),
                 TextFormField(
+                  textCapitalization: TextCapitalization.sentences,
                   controller: _controllerDescripcion,
                   minLines: 1,
                   maxLines: 3,
@@ -247,7 +251,13 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                               parentId: widget.parentCategory?.uid,
                             );
                             _db.createCategory(category);
-                            Navigator.pop(context, true);
+                            ref.invalidate(categoriesProvider);
+                            if (widget.parentCategory != null) {
+                              ref.invalidate(
+                                itemsProvider(widget.parentCategory!),
+                              );
+                            }
+                            Navigator.pop(context);
                           } catch (e) {
                             print(e);
                           }

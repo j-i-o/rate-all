@@ -3,26 +3,18 @@ import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/views/pages/item_page.dart';
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({
-    super.key,
-    required this.category,
-    this.onMainCategoryChanged,
-  });
+  const CategoryCard({super.key, required this.category});
 
   final Category category;
-  final VoidCallback? onMainCategoryChanged;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        final result = await Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ItemPage(category: category)),
         );
-        if (result == true) {
-          onMainCategoryChanged?.call();
-        }
       },
       onHorizontalDragStart: (details) => print(details),
       child: Card(

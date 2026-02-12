@@ -17,7 +17,7 @@ class DatabaseService {
     // return await itemCollection.doc().set(item.toMap());
   }
 
-  Future getMainCategories(AppUser user) async {
+  Future<List<Category>> getMainCategories(AppUser user) async {
     final snapshot = await itemCollection
         .where('userId', isEqualTo: user.uid)
         .where('parentId', isNull: true)
@@ -51,7 +51,7 @@ class DatabaseService {
     await docRef.set(itemWithId.toMap());
   }
 
-  Future getItems(Category category, AppUser user) async {
+  Future<List<BaseItem>> getItems(Category category, AppUser user) async {
     final snapshot = await itemCollection
         .where('parentId', isEqualTo: category.uid)
         .get();

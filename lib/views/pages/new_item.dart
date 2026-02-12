@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/models/item.dart';
 import 'package:flutter_application_1/providers/auth_provider.dart';
+import 'package:flutter_application_1/providers/category_provider.dart';
+import 'package:flutter_application_1/providers/item_provider.dart';
 import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_application_1/views/widgets/rating_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,6 +68,7 @@ class _NewItemState extends ConsumerState<NewItem> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
+                  textCapitalization: TextCapitalization.sentences,
                   controller: _controllerNombre,
                   decoration: InputDecoration(
                     labelText: 'Nombre',
@@ -73,6 +76,7 @@ class _NewItemState extends ConsumerState<NewItem> {
                   ),
                 ),
                 TextFormField(
+                  textCapitalization: TextCapitalization.sentences,
                   controller: _controllerDescripcion,
                   minLines: 1,
                   maxLines: 3,
@@ -121,6 +125,8 @@ class _NewItemState extends ConsumerState<NewItem> {
                               parentId: widget.category.uid,
                             );
                             _db.createItem(item);
+                            ref.invalidate(itemsProvider(widget.category));
+                            ref.invalidate(categoriesProvider);
                             Navigator.pop(context, true);
                           } catch (e) {
                             print(e);

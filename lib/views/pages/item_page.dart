@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/app_user.dart';
-import 'package:flutter_application_1/models/base_item.dart';
 import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/models/item.dart';
 import 'package:flutter_application_1/providers/accent_color_provider.dart';
-import 'package:flutter_application_1/providers/auth_provider.dart';
-import 'package:flutter_application_1/services/database.dart';
+import 'package:flutter_application_1/providers/category_provider.dart';
+import 'package:flutter_application_1/providers/item_provider.dart';
 import 'package:flutter_application_1/views/pages/new_item.dart';
 import 'package:flutter_application_1/views/widgets/category_card.dart';
 import 'package:flutter_application_1/views/widgets/item_card.dart';
@@ -22,11 +20,7 @@ class ItemPage extends ConsumerStatefulWidget {
 }
 
 class _ItemPageState extends ConsumerState<ItemPage> {
-  final DatabaseService _db = DatabaseService();
-  List<BaseItem> items = [];
-  bool _loaded = false;
   late Category _category;
-  bool modificado = false;
 
   @override
   void initState() {
@@ -34,37 +28,18 @@ class _ItemPageState extends ConsumerState<ItemPage> {
     _category = widget.category;
   }
 
-  void _loadData(AppUser user) async {
-    setState(() {
-      _loaded = false;
-    });
-    final items = await _db.getItems(_category, user);
-    setState(() {
-      this.items = items;
-      _loaded = true;
-      _category = _category.copyWith(children: items.length);
-    });
-  }
-
-  void _onItemCreated(user) async {
-    setState(() {
-      modificado = true;
-    });
-    _loadData(user);
-  }
-
-  //Al ingresar a esta pagina hay q traer todos los items de la categoría en donde nos metimos
   @override
   Widget build(BuildContext context) {
-    final authAsync = ref.watch(authProvider);
+    final itemAsync = ref.watch(itemsProvider(_category));
     final accentColor = ref.watch(accentColorProvider);
+    final items = itemAsync.asData?.value ?? [];
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
           iconSize: 25,
-          onPressed: () => Navigator.pop(context, modificado),
+          onPressed: () => Navigator.pop(context),
           icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
         toolbarHeight: 150,
@@ -97,7 +72,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      _category.children.toString(),
+                      items.length.toString(),
                       style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                     Icon(Icons.remove_red_eye_rounded, color: Colors.white),
@@ -115,14 +90,10 @@ class _ItemPageState extends ConsumerState<ItemPage> {
         ),
       ),
 
-      body: authAsync.when(
+      body: itemAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(child: Text('Error: $error')),
-        data: (user) {
-          if (!_loaded) {
-            _loadData(user!);
-            return const Center(child: CircularProgressIndicator());
-          }
+        data: (items) {
           Widget content;
 
           if (items.isEmpty) {
@@ -136,15 +107,12 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                     style: FilledButton.styleFrom(backgroundColor: accentColor),
                     child: Text('Crear item'),
                     onPressed: () async {
-                      final result = await Navigator.push(
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => NewItem(category: _category),
                         ),
                       );
-                      if (result == true) {
-                        _loadData(user!);
-                      }
                     },
                   ),
                 ],
@@ -153,7 +121,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
           } else {
             content = RefreshIndicator(
               color: accentColor,
-              onRefresh: () async => _loadData(user!),
+              onRefresh: () async => ref.invalidate(itemsProvider(_category)),
               child: ListView(
                 padding: const EdgeInsets.all(10),
                 children: items.map((i) {
@@ -177,7 +145,10 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                 child: FloatingButtonWidget(
                   newItem: true,
                   category: _category,
-                  onCreated: () => _onItemCreated(user!),
+                  onCreated: () {
+                    ref.invalidate(itemsProvider(_category));
+                    ref.invalidate(categoriesProvider);
+                  },
                 ),
               ),
             ],
