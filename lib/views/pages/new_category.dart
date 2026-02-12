@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/colors.dart';
 import 'package:flutter_application_1/domain/rating.dart';
 import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/providers/accent_color_provider.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_application_1/providers/category_provider.dart';
 import 'package:flutter_application_1/providers/item_provider.dart';
 import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_application_1/data/icons.dart';
 
 class NewCategory extends ConsumerStatefulWidget {
   const NewCategory({super.key, this.parentCategory});
@@ -17,22 +19,6 @@ class NewCategory extends ConsumerStatefulWidget {
   ConsumerState<NewCategory> createState() => _NewCategoryState();
 }
 
-const List<Color> colores = [
-  Colors.amber,
-  Colors.green,
-  Colors.teal,
-  Colors.blue,
-  Colors.deepPurple,
-  Colors.red,
-  Colors.brown,
-];
-const List<Icon> iconos = [
-  Icon(Icons.star_rounded),
-  Icon(Icons.ac_unit_rounded),
-  Icon(Icons.airplanemode_active_rounded),
-  Icon(Icons.coffee_rounded),
-  Icon(Icons.movie_rounded),
-];
 
 class _NewCategoryState extends ConsumerState<NewCategory> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -120,7 +106,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                           border: OutlineInputBorder(),
                           label: Text('Color'),
                         ),
-                        items: colores.map((Color c) {
+                        items: CategoryColors.colores.map((Color c) {
                           return DropdownMenuItem<Color>(
                             value: c,
                             child: Center(
@@ -148,7 +134,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                           border: OutlineInputBorder(),
                           label: Text('Icono'),
                         ),
-                        items: iconos.map((Icon i) {
+                        items: CategoryIcons.iconos.map((Icon i) {
                           return DropdownMenuItem<Icon>(
                             value: i,
                             alignment: AlignmentGeometry.center,
