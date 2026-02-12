@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/rating.dart';
 import 'package:flutter_application_1/models/item.dart';
 import 'package:flutter_application_1/views/widgets/rating_widget.dart';
+import 'package:flutter_application_1/views/widgets/swipeable_card.dart';
 
 class ItemCard extends StatefulWidget {
   const ItemCard({super.key, required this.item, required this.color});
@@ -18,13 +19,17 @@ class _ItemCardState extends State<ItemCard> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return SwipeableCard(
+      key: ValueKey(widget.item.uid),
+      onEdit: () =>
+          Navigator.pushNamed(context, '/new-item', arguments: widget.item),
+      onDelete: () =>
+          Navigator.pushNamed(context, '/new-item', arguments: widget.item),
       onTap: () => {
         setState(() {
           isExpanded = !isExpanded;
         }),
       },
-      onHorizontalDragStart: (details) => print(details),
       child: Card.outlined(
         color: Theme.of(context).colorScheme.surface,
         elevation: 0,
