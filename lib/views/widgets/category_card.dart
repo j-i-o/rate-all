@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/views/pages/item_page.dart';
+import 'package:flutter_application_1/views/widgets/swipeable_card.dart';
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({super.key, required this.category});
@@ -9,14 +10,16 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ItemPage(category: category)),
-        );
-      },
-      onHorizontalDragStart: (details) => print(details),
+    return SwipeableCard(
+      key: ValueKey(category.uid),
+      onEdit: () =>
+          Navigator.pushNamed(context, '/new-item', arguments: category),
+      onDelete: () =>
+          Navigator.pushNamed(context, '/new-item', arguments: category),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ItemPage(category: category)),
+      ),
       child: Card(
         color: category.color,
         elevation: 0,
