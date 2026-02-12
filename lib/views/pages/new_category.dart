@@ -251,10 +251,10 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                               parentId: widget.parentCategory?.uid,
                             );
                             _db.createCategory(category);
-                            ref.invalidate(categoriesProvider);
+                            ref.invalidate(categoriesProvider, asReload: true);
                             if (widget.parentCategory != null) {
                               ref.invalidate(
-                                itemsProvider(widget.parentCategory!),
+                                itemsProvider(widget.parentCategory!), asReload: true,
                               );
                             }
                             Navigator.pop(context);

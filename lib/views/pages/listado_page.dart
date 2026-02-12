@@ -41,7 +41,7 @@ class _ListadoPageState extends ConsumerState<ListadoPage> {
                       MaterialPageRoute(builder: (context) => NewCategory()),
                     );
                     if (result == true) {
-                      ref.invalidate(categoriesProvider);
+                      ref.invalidate(categoriesProvider, asReload: true);
                     }
                   },
                 ),
@@ -51,7 +51,7 @@ class _ListadoPageState extends ConsumerState<ListadoPage> {
         } else {
           content = RefreshIndicator(
             color: accentColor,
-            onRefresh: () async => ref.invalidate(categoriesProvider),
+            onRefresh: () async => ref.invalidate(categoriesProvider, asReload: true),
             child: ListView(
               padding: const EdgeInsets.all(20.0),
               children: categories.map((category) {

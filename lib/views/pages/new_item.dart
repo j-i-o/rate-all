@@ -125,8 +125,8 @@ class _NewItemState extends ConsumerState<NewItem> {
                               parentId: widget.category.uid,
                             );
                             _db.createItem(item);
-                            ref.invalidate(itemsProvider(widget.category));
-                            ref.invalidate(categoriesProvider);
+                            ref.invalidate(itemsProvider(widget.category), asReload: true);
+                            ref.invalidate(categoriesProvider, asReload: true);
                             Navigator.pop(context, true);
                           } catch (e) {
                             print(e);

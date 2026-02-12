@@ -146,8 +146,8 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                   newItem: true,
                   category: _category,
                   onCreated: () {
-                    ref.invalidate(itemsProvider(_category));
-                    ref.invalidate(categoriesProvider);
+                    ref.invalidate(itemsProvider(_category), asReload: true);
+                    ref.invalidate(categoriesProvider, asReload: true);
                   },
                 ),
               ),
