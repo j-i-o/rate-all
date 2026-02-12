@@ -72,7 +72,7 @@ class _ItemCardState extends State<ItemCard> {
                         widget.item.descripcion ?? '',
                         style: TextStyle(fontSize: 16, letterSpacing: 0),
                         overflow: TextOverflow.ellipsis,
-                        maxLines: isExpanded ? null : 5,
+                        maxLines: isExpanded ? 5 : null ,
                       ),
                     ),
                   ),
