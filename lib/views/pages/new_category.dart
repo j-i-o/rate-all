@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/colors.dart';
 import 'package:flutter_application_1/domain/rating.dart';
 import 'package:flutter_application_1/models/category.dart';
-import 'package:flutter_application_1/providers/accent_color_provider.dart';
 import 'package:flutter_application_1/providers/auth_provider.dart';
 import 'package:flutter_application_1/providers/category_provider.dart';
 import 'package:flutter_application_1/providers/item_provider.dart';
@@ -25,7 +24,6 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
 
   final TextEditingController _controllerNombre = TextEditingController();
   final TextEditingController _controllerDescripcion = TextEditingController();
-  final TextEditingController _controllerRating = TextEditingController();
   final DatabaseService _db = DatabaseService();
 
   Color? accentColorSelected;
