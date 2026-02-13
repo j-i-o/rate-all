@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/category.dart';
+import 'package:flutter_application_1/providers/category_provider.dart';
+import 'package:flutter_application_1/providers/item_provider.dart';
+import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_application_1/views/pages/item_page.dart';
 import 'package:flutter_application_1/views/widgets/swipeable_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CategoryCard extends StatelessWidget {
-  const CategoryCard({super.key, required this.category});
+class CategoryCard extends ConsumerWidget {
+  const CategoryCard({super.key, required this.category, this.parentCategory});
 
   final Category category;
-
+  final Category? parentCategory;
+ 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _db = DatabaseService();
+
     return SwipeableCard(
       key: ValueKey(category.uid),
+      categoryStyle: true,
       onEdit: () =>
           Navigator.pushNamed(context, '/new-item', arguments: category),
-      onDelete: () =>
-          Navigator.pushNamed(context, '/new-item', arguments: category),
+      onDelete: () async {
+        //TODO: Actualizar db pero borrar localmente para ahorrar salidas
+        await _db.deleteBaseItem(category);
+        if (parentCategory != null) {
+          ref.invalidate(itemsProvider(parentCategory!), asReload: true);
+        } else {
+          ref.invalidate(categoriesProvider, asReload: true);
+        }
+      },
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ItemPage(category: category)),

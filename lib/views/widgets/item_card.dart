@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/rating.dart';
+import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/models/item.dart';
+import 'package:flutter_application_1/providers/item_provider.dart';
+import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_application_1/views/widgets/rating_widget.dart';
 import 'package:flutter_application_1/views/widgets/swipeable_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ItemCard extends StatefulWidget {
-  const ItemCard({super.key, required this.item, required this.color});
+class ItemCard extends ConsumerStatefulWidget {
+  const ItemCard({super.key, required this.item, required this.color, required this.parentCategory});
 
+  final Category parentCategory;
   final Item item;
   final Color color;
 
   @override
-  State<ItemCard> createState() => _ItemCardState();
+  ConsumerState<ItemCard> createState() => _ItemCardState();
 }
 
-class _ItemCardState extends State<ItemCard> {
+class _ItemCardState extends ConsumerState<ItemCard> {
+  final DatabaseService _db = DatabaseService();
   bool isExpanded = false;
 
   @override
@@ -23,8 +29,11 @@ class _ItemCardState extends State<ItemCard> {
       key: ValueKey(widget.item.uid),
       onEdit: () =>
           Navigator.pushNamed(context, '/new-item', arguments: widget.item),
-      onDelete: () =>
-          Navigator.pushNamed(context, '/new-item', arguments: widget.item),
+      onDelete: () async {
+        //TODO: Actualizar db pero borrar localmente para ahorrar salidas
+        await _db.deleteBaseItem(widget.item);
+        ref.invalidate(itemsProvider(widget.parentCategory), asReload: true);
+      },
       onTap: () => {
         setState(() {
           isExpanded = !isExpanded;
@@ -72,7 +81,7 @@ class _ItemCardState extends State<ItemCard> {
                         widget.item.descripcion ?? '',
                         style: TextStyle(fontSize: 16, letterSpacing: 0),
                         overflow: TextOverflow.ellipsis,
-                        maxLines: isExpanded ? 5 : null ,
+                        maxLines: isExpanded ? 5 : null,
                       ),
                     ),
                   ),
