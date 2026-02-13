@@ -9,12 +9,8 @@ class DatabaseService {
   final CollectionReference itemCollection = FirebaseFirestore.instance
       .collection('items');
 
-  Future updateItemData(Item item) async {
-    // return await itemCollection.doc(item.uid).update(item.toMap());
-  }
-
-  Future saveItemData(Item item) async {
-    // return await itemCollection.doc().set(item.toMap());
+  Future updateItemData(BaseItem item) async {
+    return await itemCollection.doc(item.uid).update(item.toMap());
   }
 
   Future<List<Category>> getMainCategories(AppUser user) async {
@@ -94,6 +90,7 @@ class DatabaseService {
 
     return await itemCollection.doc(item.uid).delete();
   }
+  
 
   //No usado
   Future updateCategoryCount(Category category) async {

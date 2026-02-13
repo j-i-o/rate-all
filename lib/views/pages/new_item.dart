@@ -129,14 +129,16 @@ class _NewItemState extends ConsumerState<NewItem> {
                             if (user == null) return;
 
                             final item = Item(
-                              uid: '',
+                              uid: widget.itemToEdit?.uid ?? '',
                               userId: user.uid,
                               rateValue: ratingValue,
                               nombre: _controllerNombre.text,
                               descripcion: _controllerDescripcion.text,
                               parentId: widget.category.uid,
                             );
-                            _db.createItem(item);
+                            widget.itemToEdit != null
+                                ? _db.updateItemData(item)
+                                : _db.createItem(item);
                             ref.invalidate(
                               itemsProvider(widget.category),
                               asReload: true,

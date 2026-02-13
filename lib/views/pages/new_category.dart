@@ -279,7 +279,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                             if (user == null) return;
 
                             final category = Category(
-                              uid: '',
+                              uid: widget.categoryToEdit?.uid ?? '',
                               userId: user.uid,
                               nombre: _controllerNombre.text,
                               descripcion: _controllerDescripcion.text,
@@ -292,7 +292,9 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                                   : RatingConfig.numeric,
                               parentId: widget.parentCategory?.uid,
                             );
-                            _db.createCategory(category);
+                            widget.categoryToEdit != null
+                                ? _db.updateItemData(category)
+                                : _db.createCategory(category);
                             ref.invalidate(categoriesProvider, asReload: true);
                             if (widget.parentCategory != null) {
                               ref.invalidate(
