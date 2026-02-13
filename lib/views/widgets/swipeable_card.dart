@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/widgets/category_card.dart';
 
 class SwipeableCard extends StatefulWidget {
   final Widget child;

@@ -11,26 +11,49 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_1/data/icons.dart';
 
 class NewCategory extends ConsumerStatefulWidget {
-  const NewCategory({super.key, this.parentCategory});
+  const NewCategory({super.key, this.parentCategory, this.categoryToEdit});
 
   final Category? parentCategory;
+  final Category? categoryToEdit;
 
   @override
   ConsumerState<NewCategory> createState() => _NewCategoryState();
 }
-
 
 class _NewCategoryState extends ConsumerState<NewCategory> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _controllerNombre = TextEditingController();
   final TextEditingController _controllerDescripcion = TextEditingController();
+  final TextEditingController _controllerRating = TextEditingController();
   final DatabaseService _db = DatabaseService();
 
-  late Color accentColorSelected =
-      widget.parentCategory?.color ?? ref.read(accentColorProvider);
-  Icon iconSelected = Icon(Icons.star_rounded);
-  late String ratingSelected;
+  Color? accentColorSelected;
+  String? ratingSelected;
+  IconData? iconSelected;
+
+  @override
+  void initState() {
+    super.initState();
+
+    int? accentColorInt;
+    if (widget.categoryToEdit != null) {
+      accentColorInt = widget.categoryToEdit!.color.toARGB32();
+    } else if (widget.parentCategory != null) {
+      accentColorInt = widget.parentCategory!.color.toARGB32();
+    }
+
+    accentColorSelected = accentColorInt == null
+        ? null
+        : CategoryColors.colores.firstWhere(
+            (c) => c.toARGB32() == accentColorInt,
+          );
+
+    iconSelected = widget.categoryToEdit?.icono;
+    ratingSelected = widget.categoryToEdit?.rating.type.name;
+    _controllerNombre.text = widget.categoryToEdit?.nombre ?? '';
+    _controllerDescripcion.text = widget.categoryToEdit?.descripcion ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,25 +71,54 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nueva categoría',
+              widget.categoryToEdit != null
+                  ? 'Editar categoría'
+                  : 'Nueva categoría',
               style: TextStyle(fontSize: 30, color: Colors.white),
             ),
-            if (widget.parentCategory != null)
-              Row(
-                spacing: 5,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    widget.parentCategory!.icono,
-                    size: 30,
-                    color: Colors.white,
+            Row(
+              spacing: 10,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                if (widget.parentCategory != null)
+                  Row(
+                    spacing: 5,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        widget.parentCategory!.icono,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        widget.parentCategory!.nombre,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ],
                   ),
-                  Text(
-                    widget.parentCategory!.nombre,
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                if (widget.categoryToEdit != null)
+                  Row(
+                    spacing: 5,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (widget.parentCategory != null)
+                        Text(
+                          ' > ',
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      Icon(
+                        widget.categoryToEdit!.icono,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        widget.categoryToEdit!.nombre,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+              ],
+            ),
           ],
         ),
         backgroundColor: accentColorSelected,
@@ -102,6 +154,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                     Flexible(
                       flex: 1,
                       child: DropdownButtonFormField<Color>(
+                        initialValue: accentColorSelected,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           label: Text('Color'),
@@ -129,16 +182,17 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                     ),
                     Flexible(
                       flex: 1,
-                      child: DropdownButtonFormField<Icon>(
+                      child: DropdownButtonFormField<IconData>(
+                        initialValue: iconSelected,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           label: Text('Icono'),
                         ),
-                        items: CategoryIcons.iconos.map((Icon i) {
-                          return DropdownMenuItem<Icon>(
+                        items: CategoryIcons.iconos.map((IconData i) {
+                          return DropdownMenuItem<IconData>(
                             value: i,
                             alignment: AlignmentGeometry.center,
-                            child: i,
+                            child: Icon(i),
                           );
                         }).toList(),
                         onChanged: (value) {
@@ -154,6 +208,8 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                   children: [
                     Flexible(
                       child: DropdownButtonFormField<String>(
+                        //Este dato no se debe poder modificar si se edita, solo para crear
+                        initialValue: ratingSelected,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           label: Text('Tipo de evaluación'),
@@ -190,11 +246,13 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                             ),
                           ),
                         ],
-                        onChanged: (value) {
-                          if (value != null) {
-                            setState(() => ratingSelected = value);
-                          }
-                        },
+                        onChanged: widget.categoryToEdit != null
+                            ? null
+                            : (value) {
+                                if (value != null) {
+                                  setState(() => ratingSelected = value);
+                                }
+                              },
                       ),
                     ),
                   ],
@@ -227,8 +285,8 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                               userId: user.uid,
                               nombre: _controllerNombre.text,
                               descripcion: _controllerDescripcion.text,
-                              icono: iconSelected.icon!,
-                              color: accentColorSelected,
+                              icono: iconSelected ?? Icons.star_rounded,
+                              color: accentColorSelected!,
                               rating: ratingSelected == 'stars'
                                   ? RatingConfig.stars
                                   : ratingSelected == 'thumbs'
@@ -240,7 +298,8 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                             ref.invalidate(categoriesProvider, asReload: true);
                             if (widget.parentCategory != null) {
                               ref.invalidate(
-                                itemsProvider(widget.parentCategory!), asReload: true,
+                                itemsProvider(widget.parentCategory!),
+                                asReload: true,
                               );
                             }
                             Navigator.pop(context);
@@ -250,7 +309,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                         }
                       },
                       child: Text(
-                        'Crear',
+                        widget.categoryToEdit != null ? 'Actualizar' : 'Crear',
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),

@@ -9,9 +9,10 @@ import 'package:flutter_application_1/views/widgets/rating_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NewItem extends ConsumerStatefulWidget {
-  const NewItem({super.key, required this.category});
+  const NewItem({super.key, required this.category, this.itemToEdit});
 
   final Category category;
+  final Item? itemToEdit;
 
   @override
   ConsumerState<NewItem> createState() => _NewItemState();
@@ -23,6 +24,15 @@ class _NewItemState extends ConsumerState<NewItem> {
   final TextEditingController _controllerDescripcion = TextEditingController();
   final DatabaseService _db = DatabaseService();
   late double ratingValue = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controllerNombre.text = widget.itemToEdit?.nombre ?? '';
+    _controllerDescripcion.text = widget.itemToEdit?.descripcion ?? '';
+    ratingValue = widget.itemToEdit?.rateValue ?? 0.0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +50,7 @@ class _NewItemState extends ConsumerState<NewItem> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Nuevo item',
+              widget.itemToEdit != null ? 'Editar item' : 'Nuevo item',
               style: TextStyle(fontSize: 30, color: Colors.white),
             ),
             Row(
@@ -49,8 +59,9 @@ class _NewItemState extends ConsumerState<NewItem> {
               children: [
                 Icon(widget.category.icono, size: 30, color: Colors.white),
                 Text(
-                  widget.category.nombre,
+                  '${widget.category.nombre}${widget.itemToEdit != null ? ' - ${widget.itemToEdit!.nombre}' : ''}',
                   style: TextStyle(fontSize: 20, color: Colors.white),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -97,8 +108,9 @@ class _NewItemState extends ConsumerState<NewItem> {
                       child: RatingWidget(
                         rating: widget.category.rating,
                         value: ratingValue,
-                        onChanged: (value) =>
-                            setState(() => ratingValue = value),
+                        onChanged: widget.itemToEdit == null
+                            ? null
+                            : (value) => setState(() => ratingValue = value),
                       ),
                     ),
                   ],
@@ -125,7 +137,10 @@ class _NewItemState extends ConsumerState<NewItem> {
                               parentId: widget.category.uid,
                             );
                             _db.createItem(item);
-                            ref.invalidate(itemsProvider(widget.category), asReload: true);
+                            ref.invalidate(
+                              itemsProvider(widget.category),
+                              asReload: true,
+                            );
                             ref.invalidate(categoriesProvider, asReload: true);
                             Navigator.pop(context, true);
                           } catch (e) {
@@ -134,7 +149,7 @@ class _NewItemState extends ConsumerState<NewItem> {
                         }
                       },
                       child: Text(
-                        'Guardar',
+                        widget.itemToEdit != null ? 'Actualizar' : 'Guardar',
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),

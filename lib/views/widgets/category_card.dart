@@ -4,6 +4,7 @@ import 'package:flutter_application_1/providers/category_provider.dart';
 import 'package:flutter_application_1/providers/item_provider.dart';
 import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_application_1/views/pages/item_page.dart';
+import 'package:flutter_application_1/views/pages/new_category.dart';
 import 'package:flutter_application_1/views/widgets/swipeable_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +13,7 @@ class CategoryCard extends ConsumerWidget {
 
   final Category category;
   final Category? parentCategory;
- 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _db = DatabaseService();
@@ -20,8 +21,10 @@ class CategoryCard extends ConsumerWidget {
     return SwipeableCard(
       key: ValueKey(category.uid),
       categoryStyle: true,
-      onEdit: () =>
-          Navigator.pushNamed(context, '/new-item', arguments: category),
+      onEdit: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => NewCategory(categoryToEdit: category, parentCategory: parentCategory)),
+      ),
       onDelete: () async {
         //TODO: Actualizar db pero borrar localmente para ahorrar salidas
         await _db.deleteBaseItem(category);

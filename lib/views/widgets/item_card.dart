@@ -4,12 +4,18 @@ import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/models/item.dart';
 import 'package:flutter_application_1/providers/item_provider.dart';
 import 'package:flutter_application_1/services/database.dart';
+import 'package:flutter_application_1/views/pages/new_item.dart';
 import 'package:flutter_application_1/views/widgets/rating_widget.dart';
 import 'package:flutter_application_1/views/widgets/swipeable_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ItemCard extends ConsumerStatefulWidget {
-  const ItemCard({super.key, required this.item, required this.color, required this.parentCategory});
+  const ItemCard({
+    super.key,
+    required this.item,
+    required this.color,
+    required this.parentCategory,
+  });
 
   final Category parentCategory;
   final Item item;
@@ -27,8 +33,15 @@ class _ItemCardState extends ConsumerState<ItemCard> {
   Widget build(BuildContext context) {
     return SwipeableCard(
       key: ValueKey(widget.item.uid),
-      onEdit: () =>
-          Navigator.pushNamed(context, '/new-item', arguments: widget.item),
+      onEdit: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NewItem(
+            itemToEdit: widget.item,
+            category: widget.parentCategory,
+          ),
+        ),
+      ),
       onDelete: () async {
         //TODO: Actualizar db pero borrar localmente para ahorrar salidas
         await _db.deleteBaseItem(widget.item);
