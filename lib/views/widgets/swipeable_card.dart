@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/views/widgets/category_card.dart';
 
 class SwipeableCard extends StatefulWidget {
   final Widget child;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final VoidCallback? onTap;
+  final bool categoryStyle;
 
   const SwipeableCard({
     super.key,
@@ -12,6 +14,7 @@ class SwipeableCard extends StatefulWidget {
     required this.onEdit,
     required this.onDelete,
     this.onTap,
+    this.categoryStyle = false,
   });
 
   @override
@@ -22,7 +25,7 @@ class _SwipeableCardState extends State<SwipeableCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
-  final double maxSlide = 130.0;
+  late double maxSlide;
 
   @override
   void initState() {
@@ -31,7 +34,7 @@ class _SwipeableCardState extends State<SwipeableCard>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
-      lowerBound: -130,
+      lowerBound: widget.categoryStyle ? -130 : -70,
       upperBound: 0,
       value: 0,
     );
@@ -75,6 +78,7 @@ class _SwipeableCardState extends State<SwipeableCard>
 
   @override
   Widget build(BuildContext context) {
+    maxSlide = widget.categoryStyle ? 150 : 120;
     return TapRegion(
       onTapOutside: (event) => _controller.animateTo(0),
       child: ClipRect(
@@ -83,27 +87,65 @@ class _SwipeableCardState extends State<SwipeableCard>
             //Background buttons
             Positioned.fill(
               right: 5,
-              child: Row(
-                spacing: 5,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  _ActionButton(
-                    color: Colors.blue,
-                    icon: Icons.edit_rounded,
-                    onTap: () {
-                      widget.onEdit();
-                      _controller.animateTo(0);
-                    },
-                  ),
-                  _ActionButton(
-                    color: Colors.red,
-                    icon: Icons.delete_rounded,
-                    onTap: () {
-                      _controller.animateTo(0);
-                      widget.onDelete();
-                    },
-                  ),
-                ],
+              child: Builder(
+                builder: (context) {
+                  if (widget.categoryStyle) {
+                    return Row(
+                      spacing: 5,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        _ActionButton(
+                          categoryStyle: widget.categoryStyle,
+                          color: Colors.blue,
+                          icon: Icons.edit_rounded,
+                          onTap: () {
+                            widget.onEdit();
+                            _controller.animateTo(0);
+                          },
+                        ),
+                        _ActionButton(
+                          categoryStyle: widget.categoryStyle,
+                          color: Colors.red,
+                          icon: Icons.delete_rounded,
+                          onTap: () {
+                            _controller.animateTo(0);
+                            widget.onDelete();
+                          },
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 5,
+                          children: [
+                            _ActionButton(
+                              categoryStyle: widget.categoryStyle,
+                              color: Colors.blue,
+                              icon: Icons.edit_rounded,
+                              onTap: () {
+                                widget.onEdit();
+                                _controller.animateTo(0);
+                              },
+                            ),
+                            _ActionButton(
+                              categoryStyle: widget.categoryStyle,
+                              color: Colors.red,
+                              icon: Icons.delete_rounded,
+                              onTap: () {
+                                _controller.animateTo(0);
+                                widget.onDelete();
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  }
+                },
               ),
             ),
             //Foreground card
@@ -147,19 +189,22 @@ class _ActionButton extends StatelessWidget {
   final Color color;
   final IconData icon;
   final VoidCallback onTap;
+  final bool categoryStyle;
 
   const _ActionButton({
     required this.color,
     required this.icon,
     required this.onTap,
+    required this.categoryStyle,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: categoryStyle ? EdgeInsets.symmetric(vertical: 4.0): EdgeInsets.symmetric(horizontal: 4.0),
       child: SizedBox(
         width: 60,
+        height: categoryStyle ? null : 50,
         child: Material(
           borderRadius: BorderRadius.circular(15),
           color: color,
