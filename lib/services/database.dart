@@ -26,8 +26,13 @@ class DatabaseService {
     List<Category> categories = [];
 
     for (final doc in snapshot.docs) {
-      final childrenCount = await itemCollection.where('parentId', isEqualTo: doc.id).count().get();
-      final data = Map<String, dynamic>.from(doc.data() as Map<String, dynamic>);
+      final childrenCount = await itemCollection
+          .where('parentId', isEqualTo: doc.id)
+          .count()
+          .get();
+      final data = Map<String, dynamic>.from(
+        doc.data() as Map<String, dynamic>,
+      );
       data['children'] = childrenCount.count;
       categories.add(Category.fromMap(data));
     }
@@ -61,7 +66,10 @@ class DatabaseService {
 
     for (final item in items) {
       if (item is Category) {
-        final childrenCount = await itemCollection.where('parentId', isEqualTo: item.uid).count().get();
+        final childrenCount = await itemCollection
+            .where('parentId', isEqualTo: item.uid)
+            .count()
+            .get();
         Category updatedCategory = item.copyWith(children: childrenCount.count);
         items[items.indexOf(item)] = updatedCategory;
       }
@@ -69,12 +77,32 @@ class DatabaseService {
 
     return items;
   }
-  
+
+  Future deleteBaseItem(BaseItem item) async {
+    //Get all items this category is parent to
+    //Iterate through every item and delete
+    //Finally delete the category
+    if (item is Category) {
+      final children = await itemCollection
+          .where('parentId', isEqualTo: item.uid)
+          .get();
+
+      for (final child in children.docs) {
+        await itemCollection.doc(child.id).delete();
+      }
+    }
+
+    return await itemCollection.doc(item.uid).delete();
+  }
+
   //No usado
   Future updateCategoryCount(Category category) async {
-      final childrenCount = await itemCollection.where('parentId', isEqualTo: category.uid).count().get();
-      Category updatedCategory = category.copyWith(children: childrenCount.count);
-      return updatedCategory;
+    final childrenCount = await itemCollection
+        .where('parentId', isEqualTo: category.uid)
+        .count()
+        .get();
+    Category updatedCategory = category.copyWith(children: childrenCount.count);
+    return updatedCategory;
   }
 
   //getList of items sin parentId
