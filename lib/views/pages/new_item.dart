@@ -108,7 +108,7 @@ class _NewItemState extends ConsumerState<NewItem> {
                       child: RatingWidget(
                         rating: widget.category.rating,
                         value: ratingValue,
-                        onChanged: widget.itemToEdit == null
+                        onChanged: widget.itemToEdit != null
                             ? null
                             : (value) => setState(() => ratingValue = value),
                       ),
