@@ -22,12 +22,9 @@ class Category extends BaseItem {
     this.children,
   });
 
+  @override
   Map<String, dynamic> toMap() => {
-    'uid': uid,
-    'userId': userId,
-    'type': type,
-    'nombre': nombre,
-    'descripcion': descripcion,
+    ...super.toMap(),
     'iconoCode': icono.codePoint,
     'iconoFont': icono.fontFamily,
     'iconoPackage': icono.fontPackage,

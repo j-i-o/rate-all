@@ -14,12 +14,9 @@ class Item extends BaseItem {
     required this.parentId,
   });
 
+  @override
   Map<String, dynamic> toMap() => {
-    'uid': uid,
-    'userId': userId,
-    'type': type,
-    'nombre': nombre,
-    'descripcion': descripcion,
+    ...super.toMap(),
     'rateValue': rateValue,
     'parentId': parentId,
   };

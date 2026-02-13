@@ -8,8 +8,21 @@ abstract class BaseItem {
   final String nombre;
   final String? descripcion;
 
-  BaseItem({ required this.uid, required this.userId, required this.nombre, required this.type, this.descripcion });
+  BaseItem({
+    required this.uid,
+    required this.userId,
+    required this.nombre,
+    required this.type,
+    this.descripcion,
+  });
 
+  Map<String, dynamic> toMap() => {
+    'uid': uid,
+    'userId': userId,
+    'type': type,
+    'nombre': nombre,
+    'descripcion': descripcion,
+  };
 }
 
 BaseItem baseItemFromMap(Map<String, dynamic> map) {
