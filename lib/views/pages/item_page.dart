@@ -56,7 +56,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                   fit: BoxFit.fitWidth,
                   child: Text(
                     _category.nombre,
-                    style: TextStyle(fontSize: 40, color: Colors.white),
+                    style: TextStyle(fontSize: 32, color: Colors.white),
                   ),
                 ),
               ],
