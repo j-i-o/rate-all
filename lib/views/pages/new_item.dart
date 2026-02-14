@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/domain/rating.dart';
 import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/models/item.dart';
 import 'package:flutter_application_1/providers/auth_provider.dart';
@@ -100,11 +101,11 @@ class _NewItemState extends ConsumerState<NewItem> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Flexible(
-                      flex: 1,
-                      child: Text('Puntaje', style: TextStyle(fontSize: 20)),
+                      flex: widget.category.rating.type == RatingType.thumbs ? 2 : 1,
+                      child: Text( widget.category.rating.type == RatingType.thumbs ? 'Evaluación' : 'Puntaje', style: TextStyle(fontSize: 20)),
                     ),
                     Flexible(
-                      flex: 3,
+                      flex: widget.category.rating.type == RatingType.thumbs ? 2 : 3,
                       child: RatingWidget(
                         rating: widget.category.rating,
                         value: ratingValue,

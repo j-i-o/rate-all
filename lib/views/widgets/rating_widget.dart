@@ -39,7 +39,6 @@ class _RatingWidgetState extends State<RatingWidget> {
 
   void _update(double value) {
     if (!widget.isEditable) return;
-    
     setState(() => _currentValue = value);
     widget.onChanged?.call(value);
   }
@@ -53,9 +52,16 @@ class _RatingWidgetState extends State<RatingWidget> {
       mainAxisSize: MainAxisSize.min,
       children: switch (widget.rating.type) {
         RatingType.thumbs => [
-          Icon(
-            value > 0 ? Icons.thumb_up_rounded : Icons.thumb_down_rounded,
-            color: value > 0 ? Colors.green : Colors.red,
+          AnimatedRotation(
+            turns: value > 0 ? 2 : 1,
+            duration: const Duration(milliseconds: 600),
+            child: IconButton(
+              onPressed: widget.isEditable ? () => _update(widget.value == 1 ? 0 : 1) : null,
+              icon: Icon(
+                value > 0 ? Icons.thumb_up_rounded : Icons.thumb_down_rounded,
+                color: value > 0 ? Colors.green : Colors.red,
+              ),
+            ),
           ),
         ],
         RatingType.stars => List.generate(

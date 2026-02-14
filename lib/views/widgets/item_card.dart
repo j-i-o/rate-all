@@ -76,7 +76,7 @@ class _ItemCardState extends ConsumerState<ItemCard> {
                         ),
                         RatingWidget(
                           //Cambiar por el rating de la categoría! O sea que hay q pasarle a la ItemCard la categoria
-                          rating: RatingConfig.stars,
+                          rating: widget.parentCategory.rating,
                           value: widget.item.rateValue,
                         ),
                       ],
