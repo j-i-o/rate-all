@@ -22,6 +22,7 @@ class RatingWidget extends StatefulWidget {
 
 class _RatingWidgetState extends State<RatingWidget> {
   late double _currentValue;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -56,7 +57,9 @@ class _RatingWidgetState extends State<RatingWidget> {
             turns: value > 0 ? 2 : 1,
             duration: const Duration(milliseconds: 600),
             child: IconButton(
-              onPressed: widget.isEditable ? () => _update(widget.value == 1 ? 0 : 1) : null,
+              onPressed: widget.isEditable
+                  ? () => _update(widget.value == 1 ? 0 : 1)
+                  : null,
               icon: Icon(
                 value > 0 ? Icons.thumb_up_rounded : Icons.thumb_down_rounded,
                 color: value > 0 ? Colors.green : Colors.red,
@@ -82,8 +85,37 @@ class _RatingWidgetState extends State<RatingWidget> {
                 ),
         ),
         RatingType.numeric => [
+          if (widget.isEditable)
+            SizedBox(
+              width: 50,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _controller,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      onChanged: (value) => _update(double.tryParse(value) ?? 0),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Calificación requerida';
+                        }
+                        if (double.tryParse(value) == null) {
+                          return 'Sólo números';
+                        }
+                        if (double.parse(value) > RatingConfig.numeric.max!.toDouble()) {
+                          return 'Calificación inválida';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           Text(
-            '$value/10',
+            '${widget.isEditable ? '' : value}/10',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ],

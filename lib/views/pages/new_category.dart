@@ -234,7 +234,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                             ),
                           ),
                           DropdownMenuItem(
-                            value: 'number',
+                            value: 'numeric',
                             child: Row(
                               spacing: 10,
                               children: [

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/domain/rating.dart';
 import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/models/item.dart';
 import 'package:flutter_application_1/providers/item_provider.dart';
