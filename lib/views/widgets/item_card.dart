@@ -85,6 +85,8 @@ class _ItemCardState extends ConsumerState<ItemCard> {
                     title: Text(
                       widget.item.nombre,
                       style: TextStyle(fontSize: 20),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                     subtitle: AnimatedSize(
                       duration: const Duration(milliseconds: 300),

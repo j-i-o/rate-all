@@ -56,13 +56,16 @@ class _RatingWidgetState extends State<RatingWidget> {
           AnimatedRotation(
             turns: value > 0 ? 2 : 1,
             duration: const Duration(milliseconds: 600),
-            child: IconButton(
-              onPressed: widget.isEditable
+            child: GestureDetector(
+              onTap: widget.isEditable
                   ? () => _update(widget.value == 1 ? 0 : 1)
                   : null,
-              icon: Icon(
-                value > 0 ? Icons.thumb_up_rounded : Icons.thumb_down_rounded,
-                color: value > 0 ? Colors.green : Colors.red,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: Icon(
+                  value > 0 ? Icons.thumb_up_rounded : Icons.thumb_down_rounded,
+                  color: value > 0 ? Colors.green : Colors.red,
+                ),
               ),
             ),
           ),
@@ -95,8 +98,12 @@ class _RatingWidgetState extends State<RatingWidget> {
                       controller: _controller,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.end,
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      onChanged: (value) => _update(double.tryParse(value) ?? 0),
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      onChanged: (value) =>
+                          _update(double.tryParse(value) ?? 0),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Calificación requerida';
@@ -104,7 +111,8 @@ class _RatingWidgetState extends State<RatingWidget> {
                         if (double.tryParse(value) == null) {
                           return 'Sólo números';
                         }
-                        if (double.parse(value) > RatingConfig.numeric.max!.toDouble()) {
+                        if (double.parse(value) >
+                            RatingConfig.numeric.max!.toDouble()) {
                           return 'Calificación inválida';
                         }
                         return null;
