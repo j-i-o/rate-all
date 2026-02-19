@@ -109,9 +109,7 @@ class _NewItemState extends ConsumerState<NewItem> {
                       child: RatingWidget(
                         rating: widget.category.rating,
                         value: ratingValue,
-                        onChanged: widget.itemToEdit != null
-                            ? null
-                            : (value) => setState(() => ratingValue = value),
+                        onChanged: (value) => setState(() => ratingValue = value),
                       ),
                     ),
                   ],
@@ -132,7 +130,7 @@ class _NewItemState extends ConsumerState<NewItem> {
                             final item = Item(
                               uid: widget.itemToEdit?.uid ?? '',
                               userId: user.uid,
-                              rateValue: ratingValue,
+                              rateValue: double.parse(ratingValue.toStringAsFixed(2)),
                               nombre: _controllerNombre.text,
                               descripcion: _controllerDescripcion.text,
                               parentId: widget.category.uid,

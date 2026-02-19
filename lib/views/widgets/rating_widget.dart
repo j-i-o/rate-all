@@ -27,7 +27,14 @@ class _RatingWidgetState extends State<RatingWidget> {
   @override
   void initState() {
     super.initState();
+
     _currentValue = widget.value ?? 0;
+
+    if (widget.rating.type == RatingType.numeric) {
+      _controller.text = widget.value != null
+          ? formatRating(widget.value!)
+          : '';
+    }
   }
 
   @override
@@ -42,6 +49,10 @@ class _RatingWidgetState extends State<RatingWidget> {
     if (!widget.isEditable) return;
     setState(() => _currentValue = value);
     widget.onChanged?.call(value);
+  }
+
+  String formatRating(double value) {
+    return value % 1 == 0 ? value.toInt().toString() : value.toStringAsFixed(1);
   }
 
   @override
@@ -90,7 +101,7 @@ class _RatingWidgetState extends State<RatingWidget> {
         RatingType.numeric => [
           if (widget.isEditable)
             SizedBox(
-              width: 50,
+              width: 70,
               child: Row(
                 children: [
                   Expanded(
@@ -119,13 +130,18 @@ class _RatingWidgetState extends State<RatingWidget> {
                       },
                     ),
                   ),
+                  Text(
+                    '/10',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
-          Text(
-            '${widget.isEditable ? '' : value}/10',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+          if (!widget.isEditable)
+            Text(
+              '${formatRating(value)}/10',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
         ],
       },
     );
