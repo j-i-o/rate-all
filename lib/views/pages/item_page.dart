@@ -4,6 +4,7 @@ import 'package:flutter_application_1/models/item.dart';
 import 'package:flutter_application_1/providers/accent_color_provider.dart';
 import 'package:flutter_application_1/providers/category_provider.dart';
 import 'package:flutter_application_1/providers/item_provider.dart';
+import 'package:flutter_application_1/views/pages/new_category.dart';
 import 'package:flutter_application_1/views/pages/new_item.dart';
 import 'package:flutter_application_1/views/widgets/category_card.dart';
 import 'package:flutter_application_1/views/widgets/item_card.dart';
@@ -81,7 +82,14 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                 Spacer(),
                 IconButton(
                   iconSize: 25,
-                  onPressed: () {},
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NewCategory(
+                        categoryToEdit: widget.category,
+                      ),
+                    ),
+                  ),
                   icon: Icon(Icons.edit, color: Colors.white),
                 ),
               ],
@@ -126,7 +134,11 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                 padding: const EdgeInsets.all(10),
                 children: items.map((i) {
                   if (i is Item) {
-                    return ItemCard(item: i, color: _category.color, parentCategory: _category);
+                    return ItemCard(
+                      item: i,
+                      color: _category.color,
+                      parentCategory: _category,
+                    );
                   } else if (i is Category) {
                     return CategoryCard(category: i, parentCategory: _category);
                   }
