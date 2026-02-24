@@ -7,6 +7,8 @@ abstract class BaseItem {
   final String type;
   final String nombre;
   final String? descripcion;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   BaseItem({
     required this.uid,
@@ -14,6 +16,8 @@ abstract class BaseItem {
     required this.nombre,
     required this.type,
     this.descripcion,
+    this.createdAt,
+    this.updatedAt,
   });
 
   Map<String, dynamic> toMap() => {
@@ -22,6 +26,8 @@ abstract class BaseItem {
     'type': type,
     'nombre': nombre,
     'descripcion': descripcion,
+    'createdAt': createdAt,
+    'modifiedAt': updatedAt,
   };
 }
 

@@ -10,7 +10,10 @@ class DatabaseService {
       .collection('items');
 
   Future updateItemData(BaseItem item) async {
-    return await itemCollection.doc(item.uid).update(item.toMap());
+    return await itemCollection.doc(item.uid).update({
+      ...item.toMap(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 
   Future<List<Category>> getMainCategories(AppUser user) async {
@@ -24,6 +27,7 @@ class DatabaseService {
     for (final doc in snapshot.docs) {
       final childrenCount = await itemCollection
           .where('parentId', isEqualTo: doc.id)
+          .orderBy('updatedAt', descending: true)
           .count()
           .get();
       final data = Map<String, dynamic>.from(
@@ -41,7 +45,11 @@ class DatabaseService {
 
     final categoryWithId = category.copyWith(uid: docRef.id);
 
-    await docRef.set(categoryWithId.toMap());
+    await docRef.set({
+      ...categoryWithId.toMap(),
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 
   Future createItem(Item item) async {
@@ -49,13 +57,23 @@ class DatabaseService {
 
     final itemWithId = item.copyWith(uid: docRef.id);
 
-    await docRef.set(itemWithId.toMap());
+    await docRef.set({
+      ...itemWithId.toMap(),
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 
-  Future<List<BaseItem>> getItems(Category category, AppUser user) async {
-    final snapshot = await itemCollection
+  Future<List<BaseItem>> getItems(
+    Category category,
+    AppUser user) async {
+    Query query = itemCollection
         .where('parentId', isEqualTo: category.uid)
-        .get();
+        .orderBy('updatedAt', descending: true);
+    print(query);
+
+    final snapshot = await query.get();
+
     List<BaseItem> items = snapshot.docs
         .map((doc) => baseItemFromMap(doc.data() as Map<String, dynamic>))
         .toList();
@@ -90,7 +108,6 @@ class DatabaseService {
 
     return await itemCollection.doc(item.uid).delete();
   }
-  
 
   //No usado
   Future updateCategoryCount(Category category) async {

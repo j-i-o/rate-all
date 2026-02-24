@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/domain/rating.dart';
 import 'package:flutter_application_1/models/base_item.dart';
@@ -15,6 +16,8 @@ class Category extends BaseItem {
     required super.nombre,
     super.type = 'category',
     super.descripcion,
+    super.createdAt,
+    super.updatedAt,
     required this.icono,
     required this.color,
     required this.rating,
@@ -40,6 +43,8 @@ class Category extends BaseItem {
     type: map['type'],
     nombre: map['nombre'],
     descripcion: map['descripcion'],
+    createdAt: (map['createdAt'] as Timestamp?)?.toDate(),
+    updatedAt: (map['modifiedAt'] as Timestamp?)?.toDate(),
     icono: IconData(
       map['iconoCode'],
       fontFamily: map['iconoFont'],
@@ -61,6 +66,8 @@ class Category extends BaseItem {
     RatingConfig? rating,
     String? parentId,
     int? children,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return Category(
       uid: uid ?? this.uid,
@@ -72,6 +79,8 @@ class Category extends BaseItem {
       rating: rating ?? this.rating,
       parentId: parentId ?? this.parentId,
       children: children ?? this.children,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }
