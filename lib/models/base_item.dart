@@ -27,7 +27,7 @@ abstract class BaseItem {
     'nombre': nombre,
     'descripcion': descripcion,
     'createdAt': createdAt,
-    'modifiedAt': updatedAt,
+    'updatedAt': updatedAt,
   };
 }
 

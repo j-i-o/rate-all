@@ -44,7 +44,7 @@ class Category extends BaseItem {
     nombre: map['nombre'],
     descripcion: map['descripcion'],
     createdAt: (map['createdAt'] as Timestamp?)?.toDate(),
-    updatedAt: (map['modifiedAt'] as Timestamp?)?.toDate(),
+    updatedAt: (map['updatedAt'] as Timestamp?)?.toDate(),
     icono: IconData(
       map['iconoCode'],
       fontFamily: map['iconoFont'],
