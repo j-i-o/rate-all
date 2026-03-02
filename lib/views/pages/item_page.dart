@@ -103,7 +103,7 @@ class _ItemPageState extends ConsumerState<ItemPage> {
                 IconButton(
                   iconSize: 25,
                   onPressed: () => setState(() => showFilter = !showFilter),
-                  icon: Icon(Icons.filter_alt, color: Colors.white),
+                    icon: Icon(Icons.swap_vert_rounded, color: Colors.white),
                 ),
               ],
             ),
