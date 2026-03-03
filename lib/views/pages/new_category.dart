@@ -34,7 +34,6 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
   void initState() {
     super.initState();
 
-
     //Intento recuperar el color de la categoría o de la categoría padre
     int? accentColorInt;
     if (widget.categoryToEdit != null) {
@@ -77,45 +76,65 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
               style: TextStyle(fontSize: 30, color: Colors.white),
             ),
             Row(
-              spacing: 10,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 if (widget.parentCategory != null)
-                  Row(
-                    spacing: 5,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        widget.parentCategory!.icono,
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                      Text(
-                        widget.parentCategory!.nombre,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                if (widget.categoryToEdit != null)
-                  Row(
-                    spacing: 5,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      if (widget.parentCategory != null)
-                        Text(
-                          ' > ',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+                  Expanded(
+                    child: Row(
+                      spacing: 5,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          widget.parentCategory!.icono,
+                          size: 30,
+                          color: Colors.white,
                         ),
-                      Icon(
-                        widget.categoryToEdit!.icono,
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                      Text(
-                        widget.categoryToEdit!.nombre,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                    ],
+                        Expanded(
+                          child: Text(
+                            widget.parentCategory!.nombre,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                if (widget.parentCategory != null &&
+                    widget.categoryToEdit != null)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 6),
+                    child: Text(
+                      '>',
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                  ),
+
+                if (widget.categoryToEdit != null)
+                  Expanded(
+                    child: Row(
+                      spacing: 5,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          widget.categoryToEdit!.icono,
+                          size: 30,
+                          color: Colors.white,
+                        ),
+                        Expanded(
+                          child: Text(
+                            widget.categoryToEdit!.nombre,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
               ],
             ),
