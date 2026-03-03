@@ -3,7 +3,7 @@ import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/providers/category_provider.dart';
 import 'package:flutter_application_1/providers/item_provider.dart';
 import 'package:flutter_application_1/services/database.dart';
-import 'package:flutter_application_1/views/pages/item_page.dart';
+import 'package:flutter_application_1/views/pages/item_page2.dart';
 import 'package:flutter_application_1/views/pages/new_category.dart';
 import 'package:flutter_application_1/views/widgets/swipeable_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

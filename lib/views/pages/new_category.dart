@@ -34,6 +34,8 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
   void initState() {
     super.initState();
 
+
+    //Intento recuperar el color de la categoría o de la categoría padre
     int? accentColorInt;
     if (widget.categoryToEdit != null) {
       accentColorInt = widget.categoryToEdit!.color.toARGB32();
@@ -42,7 +44,7 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
     }
 
     accentColorSelected = accentColorInt == null
-        ? null
+        ? Colors.amber
         : CategoryColors.colores.firstWhere(
             (c) => c.toARGB32() == accentColorInt,
           );
@@ -281,8 +283,8 @@ class _NewCategoryState extends ConsumerState<NewCategory> {
                             final category = Category(
                               uid: widget.categoryToEdit?.uid ?? '',
                               userId: user.uid,
-                              nombre: _controllerNombre.text,
-                              descripcion: _controllerDescripcion.text,
+                              nombre: _controllerNombre.text.trim(),
+                              descripcion: _controllerDescripcion.text.trim(),
                               icono: iconSelected ?? Icons.star_rounded,
                               color: accentColorSelected!,
                               rating: ratingSelected == 'stars'
