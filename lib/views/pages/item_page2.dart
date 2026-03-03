@@ -46,289 +46,303 @@ class _ItemPageState extends ConsumerState<ItemPage> {
     return Scaffold(
       body: Stack(
         children: [
-          CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                automaticallyImplyLeading: false,
-                pinned: true,
-                floating: true,
-                leading: IconButton(
-                  iconSize: 25,
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.arrow_back, color: Colors.white),
-                ),
-                expandedHeight: 100,
-                backgroundColor: _category.color,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Row(
-                    spacing: 10,
-                    children: [
-                      Icon(_category.icono, size: 36, color: Colors.white),
-                      Expanded(
-                        child: Text(
-                          _category.nombre,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 26, color: Colors.white),
-                        ),
-                      ),
-                    ],
+          RefreshIndicator(
+            color: _category.color,
+            onRefresh: () async => ref.invalidate(itemsProvider(_category)),
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  automaticallyImplyLeading: false,
+                  pinned: true,
+                  floating: true,
+                  leading: IconButton(
+                    iconSize: 25,
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
                   ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: GestureDetector(
-                  onTap: () =>
-                      setState(() => showDescription = !showDescription),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    height: widget.category.descripcion!.isEmpty ? 0 : 30,
-                    color: _category.color,
-                    child: Text(
-                      widget.category.descripcion ?? '',
-                      style: TextStyle(
-                        color: Colors.white,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SliverPersistentHeader(
-                delegate: _FilterHeaderDelegate(
-                  minHeight: 50,
-                  maxHeight: 50,
-                  child: Container(
-                    color: _category.color,
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                  expandedHeight: 100,
+                  backgroundColor: _category.color,
+                  flexibleSpace: FlexibleSpaceBar(
+                    titlePadding: const EdgeInsets.only(left: 72, bottom: 16, right: 16),
+                    title: Row(
                       children: [
-                        Row(
-                          spacing: 8,
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              items.length.toString(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              'Items',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            // Icon(
-                            //   Icons.remove_red_eye_rounded,
-                            //   color: Colors.white,
-                            // ),
-                          ],
-                        ),
-                        Spacer(),
-                        IconButton(
-                          iconSize: 25,
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NewCategory(categoryToEdit: widget.category),
-                            ),
-                          ),
-                          icon: Icon(Icons.edit, color: Colors.white),
-                        ),
-                        IconButton(
-                          iconSize: 25,
-                          onPressed: () =>
-                              setState(() => showFilter = !showFilter),
-                          icon: Icon(
-                            showFilter
-                                ? Icons.filter_list_off
-                                : Icons.filter_list,
-                            color: Colors.white,
+                        Icon(_category.icono, size: 36, color: Colors.white),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            _category.nombre,
+                            softWrap: true,
+                            maxLines: 2,
+                            overflow: TextOverflow.visible,
+                            style: TextStyle(fontSize: 22, color: Colors.white),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _FilterHeaderDelegate(
-                  minHeight: showFilter ? 60 : 0,
-                  maxHeight: showFilter ? 60 : 0,
-                  child: Container(
-                    color: _category.color,
-                    padding: const EdgeInsets.only(right: 25, left: 25),
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          style: IconButton.styleFrom(
-                            backgroundColor:
-                                [
-                                  ItemSort.nameDesc,
-                                  ItemSort.nameAsc,
-                                ].contains(currentSort)
-                                ? Colors.black26
-                                : null,
-                          ),
-                          onPressed: () => ref
-                              .read(itemSortProvider.notifier)
-                              .setSort(
-                                currentSort == ItemSort.nameAsc
-                                    ? ItemSort.nameDesc
-                                    : ItemSort.nameAsc,
-                              ),
-                          icon: Row(
-                            children: [
-                              Icon(Icons.abc_rounded, color: Colors.white),
-                              Icon(
-                                currentSort == ItemSort.nameAsc
-                                    ? Icons.arrow_upward_rounded
-                                    : Icons.arrow_downward_rounded,
+                SliverToBoxAdapter(
+                  child: GestureDetector(
+                    onTap: () =>
+                        setState(() => showDescription = !showDescription),
+                    child: widget.category.descripcion!.isEmpty
+                        ? Container()
+                        : Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            color: _category.color,
+                            child: Text(
+                              widget.category.descripcion ?? '',
+                              style: TextStyle(
                                 color: Colors.white,
+                                overflow: showDescription
+                                    ? TextOverflow.visible
+                                    : TextOverflow.ellipsis,
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          style: IconButton.styleFrom(
-                            backgroundColor:
-                                [
-                                  ItemSort.updatedDesc,
-                                  ItemSort.updatedAsc,
-                                ].contains(currentSort)
-                                ? Colors.black26
-                                : null,
-                          ),
-                          onPressed: () => ref
-                              .read(itemSortProvider.notifier)
-                              .setSort(
-                                currentSort == ItemSort.updatedAsc
-                                    ? ItemSort.updatedDesc
-                                    : ItemSort.updatedAsc,
-                              ),
-                          icon: Row(
-                            children: [
-                              Icon(Icons.update_rounded, color: Colors.white),
-                              Icon(
-                                currentSort == ItemSort.updatedAsc
-                                    ? Icons.arrow_upward_rounded
-                                    : Icons.arrow_downward_rounded,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                        IconButton(
-                          style: IconButton.styleFrom(
-                            backgroundColor:
-                                [
-                                  ItemSort.ratingDesc,
-                                  ItemSort.ratingAsc,
-                                ].contains(currentSort)
-                                ? Colors.black26
-                                : null,
-                          ),
-                          onPressed: () => ref
-                              .read(itemSortProvider.notifier)
-                              .setSort(
-                                currentSort == ItemSort.ratingAsc
-                                    ? ItemSort.ratingDesc
-                                    : ItemSort.ratingAsc,
-                              ),
-                          icon: Row(
-                            children: [
-                              Icon(Icons.star_rounded, color: Colors.white),
-                              Icon(
-                                currentSort == ItemSort.ratingAsc
-                                    ? Icons.arrow_upward_rounded
-                                    : Icons.arrow_downward_rounded,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Spacer(),
-                        IconButton(
-                          iconSize: 25,
-                          onPressed: () => setState(() => showFilter = false),
-                          icon: Icon(Icons.close, color: Colors.white),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
-              ),
-              SliverToBoxAdapter(child: const SizedBox(height: 10)),
-              itemAsync.when(
-                loading: () => SliverToBoxAdapter(
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
-                error: (error, stackTrace) => SliverToBoxAdapter(
-                  child: Center(child: Text('Error: $error')),
-                ),
-                data: (items) {
-                  if (items.isEmpty) {
-                    return SliverToBoxAdapter(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(height: 150),
-                            Text('No hay items creados'),
-                            SizedBox(height: 20),
-                            FilledButton(
-                              style: FilledButton.styleFrom(
-                                backgroundColor: accentColor,
-                              ),
-                              child: Text('Crear item'),
-                              onPressed: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        NewItem(category: _category),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  } else {
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final item = items[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: item is Item
-                              ? ItemCard(
-                                  item: item,
-                                  color: _category.color,
-                                  parentCategory: _category,
-                                )
-                              : CategoryCard(
-                                  category: item as Category,
-                                  parentCategory: _category,
+                SliverPersistentHeader(
+                  delegate: _FilterHeaderDelegate(
+                    minHeight: 50,
+                    maxHeight: 50,
+                    child: Container(
+                      color: _category.color,
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            spacing: 8,
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                items.length.toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
                                 ),
-                        );
-                      }, childCount: items.length),
-                    );
-                  }
-                },
-              ),
-              SliverToBoxAdapter(child: const SizedBox(height: 150)),
-            ],
+                              ),
+                              Text(
+                                'Items',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              // Icon(
+                              //   Icons.remove_red_eye_rounded,
+                              //   color: Colors.white,
+                              // ),
+                            ],
+                          ),
+                          Spacer(),
+                          IconButton(
+                            iconSize: 25,
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    NewCategory(categoryToEdit: widget.category),
+                              ),
+                            ),
+                            icon: Icon(Icons.edit, color: Colors.white),
+                          ),
+                          IconButton(
+                            iconSize: 25,
+                            onPressed: () =>
+                                setState(() => showFilter = !showFilter),
+                            icon: Icon(
+                              showFilter
+                                  ? Icons.filter_list_off
+                                  : Icons.filter_list,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _FilterHeaderDelegate(
+                    minHeight: showFilter ? 60 : 0,
+                    maxHeight: showFilter ? 60 : 0,
+                    child: Container(
+                      color: _category.color,
+                      padding: const EdgeInsets.only(right: 25, left: 25),
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            style: IconButton.styleFrom(
+                              backgroundColor:
+                                  [
+                                    ItemSort.nameDesc,
+                                    ItemSort.nameAsc,
+                                  ].contains(currentSort)
+                                  ? Colors.black26
+                                  : null,
+                            ),
+                            onPressed: () => ref
+                                .read(itemSortProvider.notifier)
+                                .setSort(
+                                  currentSort == ItemSort.nameAsc
+                                      ? ItemSort.nameDesc
+                                      : ItemSort.nameAsc,
+                                ),
+                            icon: Row(
+                              children: [
+                                Icon(Icons.abc_rounded, color: Colors.white),
+                                Icon(
+                                  currentSort == ItemSort.nameAsc
+                                      ? Icons.arrow_upward_rounded
+                                      : Icons.arrow_downward_rounded,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            style: IconButton.styleFrom(
+                              backgroundColor:
+                                  [
+                                    ItemSort.updatedDesc,
+                                    ItemSort.updatedAsc,
+                                  ].contains(currentSort)
+                                  ? Colors.black26
+                                  : null,
+                            ),
+                            onPressed: () => ref
+                                .read(itemSortProvider.notifier)
+                                .setSort(
+                                  currentSort == ItemSort.updatedAsc
+                                      ? ItemSort.updatedDesc
+                                      : ItemSort.updatedAsc,
+                                ),
+                            icon: Row(
+                              children: [
+                                Icon(Icons.update_rounded, color: Colors.white),
+                                Icon(
+                                  currentSort == ItemSort.updatedAsc
+                                      ? Icons.arrow_upward_rounded
+                                      : Icons.arrow_downward_rounded,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            style: IconButton.styleFrom(
+                              backgroundColor:
+                                  [
+                                    ItemSort.ratingDesc,
+                                    ItemSort.ratingAsc,
+                                  ].contains(currentSort)
+                                  ? Colors.black26
+                                  : null,
+                            ),
+                            onPressed: () => ref
+                                .read(itemSortProvider.notifier)
+                                .setSort(
+                                  currentSort == ItemSort.ratingAsc
+                                      ? ItemSort.ratingDesc
+                                      : ItemSort.ratingAsc,
+                                ),
+                            icon: Row(
+                              children: [
+                                Icon(Icons.star_rounded, color: Colors.white),
+                                Icon(
+                                  currentSort == ItemSort.ratingAsc
+                                      ? Icons.arrow_upward_rounded
+                                      : Icons.arrow_downward_rounded,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          IconButton(
+                            iconSize: 25,
+                            onPressed: () => setState(() {
+                              showFilter = false;
+                              ref
+                                  .read(itemSortProvider.notifier)
+                                  .setSort(ItemSort.nameAsc);
+                            }),
+                            icon: Icon(Icons.close, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(child: const SizedBox(height: 10)),
+                itemAsync.when(
+                  loading: () => SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator(color: _category.color)),
+                  ),
+                  error: (error, stackTrace) => SliverToBoxAdapter(
+                    child: Center(child: Text('Error: $error')),
+                  ),
+                  data: (items) {
+                    if (items.isEmpty) {
+                      return SliverToBoxAdapter(
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 150),
+                              Text('No hay items creados'),
+                              SizedBox(height: 20),
+                              FilledButton(
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: accentColor,
+                                ),
+                                child: Text('Crear item'),
+                                onPressed: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          NewItem(category: _category),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    } else {
+                      return SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final item = items[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: item is Item
+                                ? ItemCard(
+                                    item: item,
+                                    color: _category.color,
+                                    parentCategory: _category,
+                                  )
+                                : CategoryCard(
+                                    category: item as Category,
+                                    parentCategory: _category,
+                                  ),
+                          );
+                        }, childCount: items.length),
+                      );
+                    }
+                  },
+                ),
+                SliverToBoxAdapter(child: const SizedBox(height: 150)),
+              ],
+            ),
           ),
           Positioned(
             bottom: 45,

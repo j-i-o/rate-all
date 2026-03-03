@@ -32,13 +32,11 @@ final sortedItemsProvider =
             items.sort((a, b) {
               return a.rateValue.compareTo(b.rateValue);
             });
-            categories.sort((a, b) => a.nombre.compareTo(b.nombre));
             break;
           case ItemSort.ratingDesc:
             items.sort((a, b) {
               return b.rateValue.compareTo(a.rateValue);
             });
-            categories.sort((a, b) => b.nombre.compareTo(a.nombre));
             break;
           case ItemSort.updatedAsc:
             items.sort((a, b) {
